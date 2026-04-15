@@ -11,7 +11,7 @@ export const content = {
     headingBefore: "Seu treino",
     headingEmphasis: "deixa de ser",
     headingAfter: "improviso.",
-    sub: "IA que monta a sessão, acompanha a execução e devolve progresso real. Feito pra quem treina boxe, MMA e rotinas de combate — dentro ou fora da academia.",
+    sub: "IA que monta a sessão, registra a execução e devolve progresso real. Feito pra quem treina boxe, MMA e rotinas de combate — dentro ou fora da academia.",
     ctaPrimary: {
       label: "Entrar na waitlist",
       href: "mailto:lucca.vilaca@gmail.com?subject=Quero%20testar%20o%20Kyron",
@@ -48,9 +48,9 @@ export const content = {
         label: "Plano da semana",
         title: "Semana inteira já montada",
         items: [
-          "15 sessões geradas para a semana",
-          "Conditioning, artes marciais e muay thai",
-          "+150 XP por sessão concluída",
+          "Uma sessão por dia de treino, por modalidade",
+          "Artes marciais, musculação ou esportes com bola",
+          "XP por sessão concluída, calibrado pela IA",
           "\"Gerar novo treino\" a qualquer momento",
         ],
         featured: true,
@@ -117,7 +117,7 @@ export const content = {
     headingAfter: ".",
     items: [
       {
-        title: "IA pra artes marciais reais",
+        title: "IA que entende seu contexto",
         description:
           "O treino nasce do seu ambiente, nível e tempo disponível — não de um template genérico. Funciona pra academia, mas também pra boxe e MMA com estrutura reduzida.",
         featured: true,

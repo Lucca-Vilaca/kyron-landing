@@ -42,9 +42,9 @@ export function Header() {
       <a href="#top" className="flex items-center gap-2" aria-label="Kyron">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`${basePath}/assets/kyron_logo.jpeg`}
+          src={`${basePath}/assets/kyron-logo.webp`}
           alt=""
-          className="h-7 w-7 rounded-full object-cover"
+          className="h-7 w-7 object-contain"
         />
         <span className="font-display text-[15px] font-semibold tracking-wide">KYRON</span>
       </a>
