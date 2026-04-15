@@ -9,6 +9,11 @@ kyron-*.png
 # Source phone mockup screenshots (optimized artifacts live in public/assets)
 /assets-src/
 
+# Claude Code local settings and agent instructions
+.claude/
+CLAUDE.md
+AGENTS.md
+
 # Superpowers brainstorming session files
 .superpowers/
 
