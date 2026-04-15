@@ -1,5 +1,6 @@
 import { content } from "@/lib/content";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { PhoneMockup } from "@/components/ui/PhoneMockup";
 import { Reveal } from "@/components/motion/Reveal";
 import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { cn } from "@/lib/cn";
@@ -26,13 +27,13 @@ export function Prova() {
         />
       </Reveal>
 
-      <Stagger className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-3" stagger={0.08}>
+      <Stagger className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-3 md:items-stretch" stagger={0.08}>
         {cards.map((card) => (
           <StaggerItem
             key={card.ordinal}
             as="article"
             className={cn(
-              "relative overflow-hidden rounded-[16px] border border-line bg-white/[0.04] p-7 transition-colors duration-200 hover:border-gold/30",
+              "relative flex flex-col overflow-hidden rounded-[16px] border border-line bg-white/[0.04] p-7 transition-colors duration-200 hover:border-gold/30",
               card.featured && "md:scale-[1.02] border-gold/25"
             )}
           >
@@ -42,6 +43,15 @@ export function Prova() {
             >
               {card.ordinal}
             </span>
+
+            <div className="relative mx-auto mb-6 w-[68%] max-w-[220px]">
+              <PhoneMockup
+                src={card.image.webp}
+                srcAvif={card.image.avif}
+                alt={card.image.alt}
+                className="rounded-[22px]"
+              />
+            </div>
 
             <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{card.label}</p>
             <h3 className="mt-3 font-display text-[22px] font-semibold leading-tight text-ink">

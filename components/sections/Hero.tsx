@@ -86,7 +86,7 @@ export function Hero() {
         <PhoneMockup
           src="/assets/iphone16-home.webp"
           srcAvif="/assets/iphone16-home.avif"
-          alt="Tela inicial do app Kyron mostrando o treino do dia"
+          alt="Tela inicial do Kyron com o treino de muay thai do dia pronto para começar"
           priority
         />
       </m.div>

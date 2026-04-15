@@ -2,14 +2,16 @@ import sharp from 'sharp';
 import { mkdirSync, existsSync } from 'fs';
 import { resolve, dirname } from 'path';
 
-const IPHONE16_VIEWPORT_RATIO = 852 / 393;
-
 const sources = [
-  { input: 'iphone16-home.png', outBase: 'public/assets/iphone16-home', maxWidth: 900, cropToViewport: true },
-  { input: 'iphone16-midhero.png', outBase: 'public/assets/iphone16-midhero', maxWidth: 900, cropToViewport: false },
+  { input: 'iphone16-home.jpeg', outBase: 'public/assets/iphone16-home' },
+  { input: 'iphone16-onboarding.jpeg', outBase: 'public/assets/iphone16-onboarding' },
+  { input: 'iphone16-treinos.jpeg', outBase: 'public/assets/iphone16-treinos' },
+  { input: 'iphone16-perfil.jpeg', outBase: 'public/assets/iphone16-perfil' },
 ];
 
-for (const { input, outBase, maxWidth, cropToViewport } of sources) {
+const MAX_WIDTH = 900;
+
+for (const { input, outBase } of sources) {
   if (!existsSync(input)) {
     console.log(`- ${input} not found, skipping`);
     continue;
@@ -19,16 +21,7 @@ for (const { input, outBase, maxWidth, cropToViewport } of sources) {
   const outWebp = `${outBase}.webp`;
   mkdirSync(dirname(resolve(outAvif)), { recursive: true });
 
-  let pipeline = sharp(input).resize({ width: maxWidth, withoutEnlargement: true });
-
-  if (cropToViewport) {
-    const meta = await pipeline.clone().metadata();
-    const targetHeight = Math.round(meta.width * IPHONE16_VIEWPORT_RATIO);
-    if (meta.height > targetHeight) {
-      const buf = await pipeline.toBuffer();
-      pipeline = sharp(buf).extract({ left: 0, top: 0, width: meta.width, height: targetHeight });
-    }
-  }
+  const pipeline = sharp(input).resize({ width: MAX_WIDTH, withoutEnlargement: true });
 
   await pipeline.clone().avif({ quality: 60, effort: 6 }).toFile(outAvif);
   await pipeline.clone().webp({ quality: 78 }).toFile(outWebp);

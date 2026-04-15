@@ -6,6 +6,10 @@
 # Review screenshots generated locally
 kyron-*.png
 
+# Source phone mockup screenshots (optimized artifacts live in public/assets)
+iphone16-*.jpeg
+iphone16-*.png
+
 # Superpowers brainstorming session files
 .superpowers/
 
