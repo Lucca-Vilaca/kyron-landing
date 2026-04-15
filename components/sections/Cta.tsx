@@ -143,7 +143,7 @@ export function Cta() {
               />
             </label>
             <div className="flex flex-wrap items-center gap-3">
-              <Button>Entrar na waitlist</Button>
+              <Button type="submit">Entrar na waitlist</Button>
               <Button href={fallbackContact.href} variant="secondary">
                 {fallbackContact.label}
               </Button>

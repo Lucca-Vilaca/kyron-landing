@@ -228,7 +228,7 @@ git commit -m "chore: optimize iphone mockups (avif + webp) and drop duplicates"
 
 ```tsx
 // app/layout.tsx
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Fraunces, Inter } from 'next/font/google';
 import './globals.css';
 
@@ -251,7 +251,6 @@ export const metadata: Metadata = {
   title: 'Kyron | Treino com IA, disciplina e progressão',
   description:
     'Kyron transforma rotina de treino em sistema de evolução: IA para montar sessões, score de consistência, chat, ranking e histórico de progresso.',
-  themeColor: '#0b0b0d',
   openGraph: {
     title: 'Kyron | Treino com IA, disciplina e progressão',
     description:
@@ -259,6 +258,10 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pt_BR',
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0b0b0d',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

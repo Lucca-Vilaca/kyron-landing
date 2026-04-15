@@ -20,7 +20,7 @@ A migração preserva o deploy no GitHub Pages em `<usuario>.github.io/kyron-lan
 
 ### 2.1 Stack
 
-- **Next.js 15** (App Router) com `output: 'export'` — site 100% estático
+- **Next.js 16** (App Router) com `output: 'export'` — site 100% estático
 - **TypeScript** em modo strict
 - **Tailwind CSS v4** (nova arquitetura CSS-first, configuração via `@theme` no `globals.css`, sem `tailwind.config.js`)
 - **Framer Motion** (com `LazyMotion` + `domAnimation`) para scroll reveals e microinterações
