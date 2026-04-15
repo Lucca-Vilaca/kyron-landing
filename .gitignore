@@ -5,3 +5,6 @@
 
 # Review screenshots generated locally
 kyron-*.png
+
+# Superpowers brainstorming session files
+.superpowers/
