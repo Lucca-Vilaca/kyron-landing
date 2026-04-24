@@ -38,8 +38,8 @@ export const content = {
         ],
         featured: false,
         image: {
-          webp: "/assets/iphone16-onboarding.webp",
-          avif: "/assets/iphone16-onboarding.avif",
+          webp: "/assets/mockups/01-onboarding.svg",
+          avif: undefined,
           alt: "Tela de onboarding do Kyron com insight da IA sobre musculação",
         },
       },
@@ -55,8 +55,8 @@ export const content = {
         ],
         featured: true,
         image: {
-          webp: "/assets/iphone16-treinos.webp",
-          avif: "/assets/iphone16-treinos.avif",
+          webp: "/assets/mockups/03-treinos.svg",
+          avif: undefined,
           alt: "Tela Meus Treinos do Kyron com 15 sessões da semana",
         },
       },
@@ -72,8 +72,8 @@ export const content = {
         ],
         featured: false,
         image: {
-          webp: "/assets/iphone16-perfil.webp",
-          avif: "/assets/iphone16-perfil.avif",
+          webp: "/assets/mockups/04-perfil.svg",
+          avif: undefined,
           alt: "Tela de perfil do Kyron mostrando Kyron Score e XP",
         },
       },

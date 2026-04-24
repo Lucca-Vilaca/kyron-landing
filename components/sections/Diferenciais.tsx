@@ -37,13 +37,13 @@ export function Diferenciais() {
           >
             <h3
               className={cn(
-                "font-display font-semibold leading-tight text-ink",
-                item.featured ? "text-[32px] md:text-[40px]" : "text-[22px]"
+                "font-display leading-tight text-ink tracking-[-0.01em]",
+                item.featured ? "text-[26px] md:text-[32px]" : "text-[20px]"
               )}
             >
               {item.title}
             </h3>
-            <p className="mt-4 max-w-[52ch] text-[15px] leading-relaxed text-ink-muted">
+            <p className="mt-4 max-w-[52ch] text-[14px] leading-relaxed text-ink-muted">
               {item.description}
             </p>
           </StaggerItem>

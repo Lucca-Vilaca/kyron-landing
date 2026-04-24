@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="393" height="852" viewBox="0 0 393 852" fill="none">
+  <style type="text/css"><![CDATA[
+    @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap');
+    text { font-family: 'Inter', system-ui, sans-serif; }
+  ]]></style>
+
+  <!-- Kyron Onboarding Screen - Choose Your Disciplines -->
+  <defs>
+    <linearGradient id="yellowGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F4C430"/>
+      <stop offset="1" stop-color="#E0AE10"/>
+    </linearGradient>
+    <linearGradient id="cardSelectedGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1F1A0A"/>
+      <stop offset="1" stop-color="#161309"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="393" height="852" fill="#0A0A0A"/>
+
+  <!-- Status bar -->
+  <text x="32" y="36" fill="#FFFFFF" font-family="Inter, system-ui" font-size="17" font-weight="600">18:06</text>
+  <!-- Status icons (signal, wifi, battery) -->
+  <g transform="translate(320, 22)">
+    <!-- Signal -->
+    <rect x="0" y="10" width="3" height="4" rx="0.5" fill="#FFFFFF"/>
+    <rect x="5" y="7" width="3" height="7" rx="0.5" fill="#FFFFFF"/>
+    <rect x="10" y="4" width="3" height="10" rx="0.5" fill="#FFFFFF"/>
+    <rect x="15" y="1" width="3" height="13" rx="0.5" fill="#FFFFFF" opacity="0.3"/>
+    <!-- WiFi -->
+    <path d="M26 8 Q32 3 38 8" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M28 11 Q32 7 36 11" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="32" cy="14" r="1.5" fill="#FFFFFF"/>
+    <!-- Battery -->
+    <rect x="46" y="5" width="22" height="10" rx="2.5" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+    <rect x="69" y="7.5" width="1.5" height="5" rx="0.5" fill="#FFFFFF"/>
+    <rect x="48" y="7" width="17" height="6" rx="1" fill="#F4C430"/>
+    <text x="50" y="12.5" fill="#000000" font-family="Inter" font-size="7" font-weight="700">39</text>
+  </g>
+
+  <!-- Top nav: X | KYRON | PASSO 1/7 -->
+  <g transform="translate(0, 80)">
+    <!-- Close X -->
+    <g transform="translate(24, 0)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round">
+      <line x1="0" y1="0" x2="14" y2="14"/>
+      <line x1="14" y1="0" x2="0" y2="14"/>
+    </g>
+    <!-- KYRON wordmark (center) -->
+    <text x="196.5" y="14" fill="#FFFFFF" font-family="'Anton', 'Archivo Black', sans-serif" font-size="20" font-weight="700" text-anchor="middle" letter-spacing="3">KYRON</text>
+    <!-- Step indicator -->
+    <text x="369" y="13" fill="#F4C430" font-family="Inter" font-size="10" font-weight="700" text-anchor="end" letter-spacing="1.2">PASSO 1/7</text>
+    <!-- Underline under KYRON -->
+    <rect x="174" y="24" width="45" height="1.5" fill="#F4C430"/>
+  </g>
+
+  <!-- Title: ESCOLHA SUAS -->
+  <text x="24" y="170" fill="#FFFFFF" font-family="'Anton', 'Archivo Black', sans-serif" font-size="34" font-weight="700" letter-spacing="0.5">ESCOLHA SUAS</text>
+  <!-- Title: DISCIPLINAS (yellow) -->
+  <text x="24" y="214" fill="#F4C430" font-family="'Anton', 'Archivo Black', sans-serif" font-size="44" font-weight="700" letter-spacing="0.5">DISCIPLINAS</text>
+
+  <!-- Subtitle -->
+  <text x="24" y="250" fill="#B5B5B5" font-family="Inter" font-size="13" font-weight="400">
+    <tspan x="24" dy="0">Selecione até duas principais (você pode</tspan>
+    <tspan x="24" dy="18">escolher mais de uma). A IA do Kyron vai calibrar</tspan>
+    <tspan x="24" dy="18">seu motor neural para suas necessidades</tspan>
+    <tspan x="24" dy="18">atléticas.</tspan>
+  </text>
+
+  <!-- Card: Artes Marciais (unselected) -->
+  <g transform="translate(24, 345)">
+    <rect width="345" height="62" rx="14" fill="#151515" stroke="#2A2A2A" stroke-width="1"/>
+    <!-- Icon: boxing gloves (simple) -->
+    <g transform="translate(18, 18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 16 L4 8 Q4 4 8 4 L16 4 Q20 4 20 8 L20 14 Q20 18 17 20 L9 20 Q4 20 4 16 Z"/>
+      <path d="M14 4 L14 8"/>
+    </g>
+    <text x="54" y="29" fill="#FFFFFF" font-family="Inter" font-size="15" font-weight="700" letter-spacing="0.3">ARTES MARCIAIS</text>
+    <text x="54" y="47" fill="#9A9A9A" font-family="Inter" font-size="11" font-weight="400">Combate, sobriedade e explosão</text>
+    <!-- Chevron down -->
+    <g transform="translate(318, 28)" stroke="#9A9A9A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,0 6,6 12,0"/>
+    </g>
+  </g>
+
+  <!-- Card: Musculação (SELECTED) -->
+  <g transform="translate(24, 422)" filter="url(#softShadow)">
+    <rect width="345" height="62" rx="14" fill="url(#cardSelectedGrad)" stroke="#F4C430" stroke-width="1.5"/>
+    <!-- Icon: dumbbell -->
+    <g transform="translate(18, 22)" stroke="#F4C430" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="0" y="6" width="3" height="8" rx="1"/>
+      <rect x="3" y="4" width="3" height="12" rx="1"/>
+      <line x1="6" y1="10" x2="18" y2="10" stroke-width="3"/>
+      <rect x="18" y="4" width="3" height="12" rx="1"/>
+      <rect x="21" y="6" width="3" height="8" rx="1"/>
+    </g>
+    <text x="54" y="29" fill="#FFFFFF" font-family="Inter" font-size="15" font-weight="700" letter-spacing="0.3">MUSCULAÇÃO</text>
+    <text x="54" y="47" fill="#B5B5B5" font-family="Inter" font-size="11" font-weight="400">Força, hipertrofia e potência</text>
+    <!-- Check mark (yellow filled square with check) -->
+    <g transform="translate(309, 21)">
+      <rect width="20" height="20" rx="5" fill="#F4C430"/>
+      <polyline points="5,10 9,14 15,6" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- Insight Kyron IA (nested tip card) -->
+  <g transform="translate(24, 500)">
+    <rect width="345" height="68" rx="14" fill="#0F0F0F" stroke="#2A2A2A" stroke-width="1"/>
+    <!-- Icon: location/bulb with yellow -->
+    <g transform="translate(16, 14)">
+      <circle cx="7" cy="7" r="6.5" fill="#F4C430" opacity="0.15"/>
+      <path d="M7 2 Q11 2 11 6 Q11 8 9 10 L9 12 L5 12 L5 10 Q3 8 3 6 Q3 2 7 2 Z" fill="#F4C430"/>
+    </g>
+    <text x="46" y="22" fill="#F4C430" font-family="Inter" font-size="10" font-weight="700" letter-spacing="1.8">INSIGHT KYRON IA</text>
+    <text x="16" y="45" fill="#CFCFCF" font-family="Inter" font-size="11.5" font-weight="400" font-style="italic">
+      <tspan x="16" dy="0">"O modo musculação foca em ciclos de</tspan>
+      <tspan x="16" dy="15">hipertrofia, sobrecarga progressiva e</tspan>
+      <tspan x="16" dy="15">janelas ideais de recuperação."</tspan>
+    </text>
+  </g>
+
+  <!-- Card: Esportes com Bola (unselected, partial) -->
+  <g transform="translate(24, 588)">
+    <rect width="345" height="62" rx="14" fill="#151515" stroke="#2A2A2A" stroke-width="1"/>
+    <!-- Icon: ball -->
+    <g transform="translate(20, 20)" stroke="#FFFFFF" stroke-width="1.8" fill="none">
+      <circle cx="10" cy="10" r="10"/>
+      <path d="M0 10 L20 10 M10 0 L10 20 M2 4 L18 16 M2 16 L18 4" opacity="0.5"/>
+    </g>
+    <text x="54" y="29" fill="#FFFFFF" font-family="Inter" font-size="15" font-weight="700" letter-spacing="0.3">ESPORTES COM BOLA</text>
+    <text x="54" y="47" fill="#9A9A9A" font-family="Inter" font-size="11" font-weight="400">Coordenação, agilidade e visão</text>
+    <!-- Chevron down -->
+    <g transform="translate(318, 28)" stroke="#9A9A9A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="0,0 6,6 12,0"/>
+    </g>
+  </g>
+
+  <!-- CTA Button: CONTINUAR -->
+  <g transform="translate(24, 738)">
+    <rect width="345" height="58" rx="14" fill="url(#yellowGrad)"/>
+    <text x="172" y="37" fill="#0A0A0A" font-family="Inter" font-size="15" font-weight="800" text-anchor="middle" letter-spacing="2.5">CONTINUAR</text>
+    <!-- Arrow -->
+    <g transform="translate(280, 24)" stroke="#0A0A0A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="0" y1="5" x2="10" y2="5"/>
+      <polyline points="6,0 10,5 6,10"/>
+    </g>
+  </g>
+
+  <!-- Home indicator -->
+  <rect x="131" y="830" width="132" height="5" rx="2.5" fill="#FFFFFF"/>
+</svg>

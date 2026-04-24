@@ -49,7 +49,7 @@ export function Faq() {
                   >
                     <span
                       className={cn(
-                        "font-display text-[22px] font-medium leading-snug text-ink md:text-[26px]",
+                        "font-display text-[19px] leading-snug tracking-[-0.01em] text-ink md:text-[22px]",
                         isOpen && "text-gold"
                       )}
                     >
@@ -78,7 +78,7 @@ export function Faq() {
                       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-[64ch] pb-6 text-[15px] leading-relaxed text-ink-muted md:text-[16px]">
+                      <p className="max-w-[64ch] pb-6 text-[14px] leading-relaxed text-ink-muted">
                         {item.answer}
                       </p>
                     </m.div>

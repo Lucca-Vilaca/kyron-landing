@@ -11,8 +11,9 @@
   --color-gold-soft: #f2d18a;
   --color-crimson: #8f2d1d;
 
-  --font-display: var(--font-fraunces);
-  --font-sans: var(--font-inter);
+  --font-display: var(--font-instrument-serif);
+  --font-sans: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
 
   --radius-sm: 4px;
   --radius-md: 16px;
@@ -29,6 +30,8 @@
   body {
     color: var(--color-ink);
     font-family: var(--font-sans), system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     background:
@@ -65,7 +68,13 @@
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-display), "Times New Roman", serif;
+    letter-spacing: 0;
+  }
+
+  .font-mono {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-feature-settings: "tnum", "ss02";
   }
 
   .text-balance {

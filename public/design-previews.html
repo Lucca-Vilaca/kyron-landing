@@ -1,0 +1,2801 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kyron · Design directions</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@300;400;500;700&family=Archivo:wght@400;500;600;700;800;900&family=Syne:ital,wght@0,400..800;1,400..800&family=Instrument+Serif:ital@0;1&family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Special+Elite&family=VT323&family=Unna:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=Abril+Fatface&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #08080a;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════ switcher ═══════════ */
+  .chrome {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(8,8,10,0.72);
+    backdrop-filter: blur(22px) saturate(160%);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .chrome__brand {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+  }
+  .chrome__brand strong { color: #fff; font-weight: 500; }
+  .switcher {
+    display: flex;
+    gap: 3px;
+    padding: 3px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+  }
+  .switcher button {
+    padding: 7px 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: all .25s ease;
+  }
+  .switcher button:hover { color: #fff; }
+  .switcher button[aria-pressed="true"] { background: #fff; color: #000; }
+  .chrome__hint {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+  }
+  @media (max-width: 860px) {
+    .chrome__hint { display: none; }
+    .switcher button { padding: 6px 10px; font-size: 9px; }
+  }
+  .stage { padding-top: 56px; min-height: 100vh; }
+  .preview { display: none; }
+  .preview.is-active { display: block; animation: fadeIn .5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     1 · BRUTALIST SPORTS PRESS — jornal de luta 80s, maximalista
+     ═══════════════════════════════════════════════════════════════════ */
+  .d1 {
+    background: #efe8d7;
+    color: #0a0a0a;
+    font-family: "Fraunces", serif;
+    position: relative;
+    overflow: hidden;
+  }
+  .d1::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(0,0,0,0.12) 1px, transparent 1px);
+    background-size: 3px 3px;
+    opacity: 0.55;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+  .d1::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='r'><feTurbulence baseFrequency='0.85' numOctaves='2'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.07 0'/></filter><rect width='400' height='400' filter='url(%23r)'/></svg>");
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ticker top */
+  .d1__ticker {
+    position: relative;
+    z-index: 5;
+    background: #0a0a0a;
+    color: #efe8d7;
+    border-bottom: 2px solid #0a0a0a;
+    font-family: "Archivo", sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .d1__ticker-track {
+    display: inline-block;
+    animation: d1-ticker 28s linear infinite;
+  }
+  .d1__ticker-track span { margin-right: 40px; }
+  .d1__ticker-track .hot { color: #e11900; }
+  @keyframes d1-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* masthead row */
+  .d1__wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 14px 24px 40px;
+  }
+  .d1__masthead-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 12px 0 10px;
+    border-bottom: 4px double #0a0a0a;
+    font-family: "Archivo", sans-serif;
+    text-transform: uppercase;
+  }
+  .d1__masthead-row .l, .d1__masthead-row .r {
+    font-size: 10px; letter-spacing: 0.2em; color: rgba(10,10,10,0.7); font-weight: 600;
+  }
+  .d1__masthead-row .r { text-align: right; }
+  .d1__masthead-logo {
+    font-family: "Abril Fatface", serif;
+    font-size: 44px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .d1__masthead-logo span { color: #e11900; }
+
+  .d1__subnav {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Archivo", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 0;
+    border-bottom: 2px solid #0a0a0a;
+  }
+  .d1__subnav span { display: inline-flex; align-items: center; gap: 6px; }
+  .d1__subnav .dot { width: 6px; height: 6px; background: #e11900; border-radius: 50%; animation: d1-pulse 1.6s ease infinite; }
+  @keyframes d1-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+  /* big headline */
+  .d1__hero {
+    position: relative;
+    padding: 24px 0 20px;
+    border-bottom: 2px solid #0a0a0a;
+  }
+  .d1__kicker {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 12px;
+    font-family: "Archivo", sans-serif;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: #e11900;
+    color: #efe8d7;
+    padding: 4px 10px;
+    margin-bottom: 14px;
+    transform: rotate(-1deg);
+  }
+  .d1__kicker::after { content: "●"; }
+  .d1__masthead {
+    font-family: "Archivo Black", sans-serif;
+    font-size: clamp(64px, 14vw, 220px);
+    line-height: 0.78;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+    position: relative;
+  }
+  .d1__masthead em {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 300;
+    color: #e11900;
+    text-transform: lowercase;
+    letter-spacing: -0.03em;
+    display: inline-block;
+    transform: translateY(-10px);
+    position: relative;
+  }
+  .d1__masthead em::after {
+    content: "";
+    position: absolute;
+    bottom: 8px; left: 4%; right: 4%;
+    height: 14px;
+    background: rgba(225,25,0,0.25);
+    z-index: -1;
+    transform: skew(-6deg);
+  }
+
+  /* callout stickers */
+  .d1__stickers {
+    position: absolute;
+    right: 0;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    z-index: 3;
+  }
+  .d1__sticker {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    border: 2px solid #0a0a0a;
+    background: #efe8d7;
+    box-shadow: 4px 4px 0 #0a0a0a;
+    line-height: 1.2;
+    max-width: 160px;
+    text-align: right;
+  }
+  .d1__sticker b { font-size: 22px; display: block; color: #e11900; line-height: 1; }
+  .d1__sticker--red { background: #e11900; color: #efe8d7; box-shadow: 4px 4px 0 #0a0a0a; }
+  .d1__sticker--red b { color: #efe8d7; }
+  .d1__sticker--tilt { transform: rotate(3deg); }
+  .d1__sticker--tilt2 { transform: rotate(-4deg); }
+
+  .d1__meta {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    border-bottom: 2px solid #0a0a0a;
+    padding: 8px 0;
+    margin-bottom: 24px;
+    font-family: "Archivo", sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .d1__meta > div { padding: 4px 10px; border-left: 1px solid #0a0a0a; line-height: 1.25; }
+  .d1__meta > div:first-child { border-left: none; padding-left: 0; }
+  .d1__meta > div .k { display: block; color: rgba(10,10,10,0.5); font-weight: 500; font-size: 8px; margin-bottom: 2px; }
+
+  /* article body */
+  .d1__body {
+    display: grid;
+    grid-template-columns: 2fr 3fr 1.6fr;
+    gap: 28px;
+    align-items: start;
+    padding-top: 10px;
+  }
+  .d1__lede {
+    font-family: "Fraunces", serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.18;
+    font-style: italic;
+  }
+  .d1__lede::first-letter {
+    font-family: "Abril Fatface", serif;
+    font-style: normal;
+    float: left;
+    font-size: 96px;
+    line-height: 0.78;
+    padding: 8px 12px 0 0;
+    color: #e11900;
+  }
+  .d1__pullquote {
+    margin-top: 20px;
+    padding: 14px 0;
+    border-top: 4px solid #0a0a0a;
+    border-bottom: 4px solid #0a0a0a;
+    font-family: "Abril Fatface", serif;
+    font-size: 26px;
+    line-height: 1.1;
+  }
+  .d1__pullquote::before {
+    content: "“";
+    font-size: 64px;
+    line-height: 0;
+    vertical-align: -20px;
+    color: #e11900;
+    margin-right: 6px;
+  }
+  .d1__byline {
+    margin-top: 10px;
+    font-family: "Archivo", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(10,10,10,0.7);
+  }
+  .d1__stack {
+    column-count: 2;
+    column-gap: 28px;
+    column-rule: 1px solid #0a0a0a;
+    font-size: 14.5px;
+    line-height: 1.58;
+  }
+  .d1__stack p { margin: 0 0 11px; }
+  .d1__stack p::first-line { font-variant: small-caps; letter-spacing: 0.04em; }
+  .d1__stack strong { background: #e11900; color: #efe8d7; padding: 0 4px; font-weight: 700; }
+  .d1__inset {
+    background: #0a0a0a;
+    color: #efe8d7;
+    padding: 14px;
+    margin: 10px 0;
+    break-inside: avoid;
+    border: 2px solid #0a0a0a;
+  }
+  .d1__inset-h {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #e11900;
+    margin-bottom: 6px;
+  }
+  .d1__inset-q {
+    font-family: "Abril Fatface", serif;
+    font-size: 20px; line-height: 1.1;
+  }
+
+  .d1__right { display: flex; flex-direction: column; gap: 14px; }
+  .d1__round {
+    border: 2px solid #0a0a0a;
+    padding: 14px;
+    font-family: "Archivo", sans-serif;
+    position: relative;
+    background: rgba(239,232,215,0.5);
+  }
+  .d1__round:nth-child(even) { background: #0a0a0a; color: #efe8d7; }
+  .d1__round:nth-child(even) .d1__round-l { color: rgba(239,232,215,0.6); }
+  .d1__round-stamp {
+    position: absolute;
+    top: -10px; right: -10px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: #e11900;
+    color: #efe8d7;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1;
+    transform: rotate(-14deg);
+    border: 2px solid #0a0a0a;
+  }
+  .d1__round-n {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 72px;
+    line-height: 0.8;
+    margin-bottom: 4px;
+    letter-spacing: -0.04em;
+  }
+  .d1__round-l {
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(10,10,10,0.55);
+    margin-bottom: 6px;
+  }
+  .d1__round-t { font-size: 13px; font-weight: 700; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.02em; }
+
+  .d1__ctas {
+    grid-column: 1 / -1;
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 4px double #0a0a0a;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .d1__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 26px;
+    background: #e11900;
+    color: #efe8d7;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 2px solid #0a0a0a;
+    box-shadow: 7px 7px 0 #0a0a0a;
+    transition: transform .14s ease, box-shadow .14s ease;
+  }
+  .d1__cta:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0 #0a0a0a; }
+  .d1__cta--ghost { background: transparent; color: #0a0a0a; }
+  .d1__cta-tail {
+    flex: 1;
+    font-family: "Special Elite", monospace;
+    font-size: 12px;
+    text-align: right;
+    color: rgba(10,10,10,0.6);
+  }
+
+  /* section II — prova */
+  .d1__sec {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 10px solid #0a0a0a;
+    position: relative;
+  }
+  .d1__sec-tag {
+    position: absolute;
+    top: -18px; left: 0;
+    background: #efe8d7;
+    border: 2px solid #0a0a0a;
+    padding: 4px 12px;
+    font-family: "Archivo Black", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .d1__sec-head {
+    font-family: "Archivo Black", sans-serif;
+    font-size: clamp(36px, 5vw, 72px);
+    line-height: 0.9;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    margin: 16px 0 24px;
+    max-width: 22ch;
+  }
+  .d1__sec-head em {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 400;
+    color: #e11900;
+    text-transform: lowercase;
+    letter-spacing: -0.03em;
+  }
+  .d1__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 3px solid #0a0a0a;
+    background: #0a0a0a;
+  }
+  .d1__cards > article {
+    padding: 22px 18px;
+    background: #efe8d7;
+    margin: 1px;
+    position: relative;
+  }
+  .d1__cards > article:nth-child(2) { background: #0a0a0a; color: #efe8d7; }
+  .d1__cards > article:nth-child(2) .d1__card-lbl { color: rgba(239,232,215,0.6); }
+  .d1__cards > article:nth-child(2) .d1__card-ord { color: #e11900; }
+  .d1__card-ord {
+    font-family: "Fraunces", serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 92px;
+    line-height: 0.85;
+    color: #e11900;
+    margin-bottom: 4px;
+  }
+  .d1__card-lbl {
+    font-family: "Archivo", sans-serif;
+    font-weight: 800;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: rgba(10,10,10,0.6);
+  }
+  .d1__card-title {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 20px;
+    line-height: 1;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+  .d1__card-list { list-style: none; padding: 0; margin: 0 0 14px; font-family: "Fraunces", serif; font-size: 14px; line-height: 1.4; }
+  .d1__card-list li { padding: 6px 0; border-top: 1px dashed currentColor; opacity: 0.9; }
+  .d1__card-list li:first-child { border-top: none; }
+  .d1__card-foot {
+    font-family: "Archivo", sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    border-top: 2px solid currentColor;
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0.75;
+  }
+
+  /* section III — diferenciais (classified ads style) */
+  .d1__class {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 6px double #0a0a0a;
+  }
+  .d1__class-head {
+    font-family: "Abril Fatface", serif;
+    font-size: clamp(34px, 6vw, 78px);
+    line-height: 0.95;
+    margin: 0 0 20px;
+  }
+  .d1__class-head em { color: #e11900; font-style: italic; }
+  .d1__class-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .d1__ad {
+    border: 2px solid #0a0a0a;
+    padding: 14px;
+    background: rgba(239,232,215,0.4);
+    position: relative;
+    transition: transform .2s ease;
+  }
+  .d1__ad:hover { transform: translateY(-3px) rotate(-1deg); }
+  .d1__ad:nth-child(odd) { background: #0a0a0a; color: #efe8d7; }
+  .d1__ad-n {
+    font-family: "Abril Fatface", serif;
+    font-size: 40px;
+    line-height: 0.9;
+    color: #e11900;
+    margin-bottom: 4px;
+  }
+  .d1__ad-t {
+    font-family: "Archivo Black", sans-serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+  .d1__ad-d { font-family: "Fraunces", serif; font-size: 13px; line-height: 1.4; }
+
+  /* footer colophon */
+  .d1__colophon {
+    margin-top: 60px;
+    padding: 22px 0 10px;
+    border-top: 10px solid #0a0a0a;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    font-family: "Archivo", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .d1__colophon h4 {
+    font-family: "Abril Fatface", serif;
+    font-size: 22px;
+    text-transform: none;
+    letter-spacing: 0;
+    margin: 0 0 6px;
+  }
+  .d1__colophon p { margin: 0 0 4px; line-height: 1.5; }
+  .d1__regmarks {
+    display: flex; gap: 4px; margin-top: 12px;
+  }
+  .d1__regmarks span { width: 14px; height: 14px; border: 2px solid #0a0a0a; border-radius: 50%; position: relative; }
+  .d1__regmarks span::before, .d1__regmarks span::after {
+    content: ""; position: absolute; background: #0a0a0a;
+  }
+  .d1__regmarks span::before { left: 50%; top: -4px; bottom: -4px; width: 2px; transform: translateX(-50%); }
+  .d1__regmarks span::after { top: 50%; left: -4px; right: -4px; height: 2px; transform: translateY(-50%); }
+
+  @media (max-width: 900px) {
+    .d1__body { grid-template-columns: 1fr; }
+    .d1__stack { column-count: 1; }
+    .d1__cards { grid-template-columns: 1fr; }
+    .d1__class-grid { grid-template-columns: repeat(2, 1fr); }
+    .d1__meta { grid-template-columns: repeat(3, 1fr); }
+    .d1__colophon { grid-template-columns: 1fr; }
+    .d1__stickers { position: relative; top: 0; flex-direction: row; flex-wrap: wrap; margin: 10px 0; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     2 · TACTICAL HUD — inspeção militar, multi-painel, motion contínuo
+     ═══════════════════════════════════════════════════════════════════ */
+  .d2 {
+    background: radial-gradient(ellipse at 50% 40%, #0a1a0d 0%, #000 70%);
+    color: #e4e2db;
+    font-family: "JetBrains Mono", monospace;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+  .d2::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(157,255,0,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(157,255,0,0.055) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 90%);
+    z-index: 1;
+  }
+  .d2::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,0.018) 3px 4px);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .d2__scan {
+    position: absolute;
+    left: 0; right: 0;
+    height: 140px;
+    background: linear-gradient(180deg, transparent 0%, rgba(157,255,0,0.12) 50%, transparent 100%);
+    pointer-events: none;
+    animation: d2-scan 6s linear infinite;
+    z-index: 1;
+  }
+  @keyframes d2-scan { 0% { top: -140px; } 100% { top: 110%; } }
+
+  .d2__overlay {
+    position: fixed;
+    top: 56px; left: 0; right: 0;
+    display: flex; justify-content: space-between;
+    padding: 12px 24px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: #9dff00;
+    text-transform: uppercase;
+    z-index: 50;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    border-bottom: 1px solid rgba(157,255,0,0.15);
+  }
+  .d2__overlay .group { display: flex; gap: 18px; align-items: center; }
+  .d2__blink { animation: d2-blink 1.2s steps(2) infinite; }
+  @keyframes d2-blink { 50% { opacity: 0; } }
+
+  .d2__corners {
+    position: fixed;
+    top: 84px; left: 12px; right: 12px; bottom: 12px;
+    pointer-events: none;
+    z-index: 40;
+  }
+  .d2__corners span {
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 2px solid #9dff00;
+    opacity: 0.6;
+  }
+  .d2__corners span:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+  .d2__corners span:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+  .d2__corners span:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+  .d2__corners span:nth-child(4) { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+  .d2__wrap {
+    position: relative;
+    z-index: 5;
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 80px 36px 60px;
+  }
+
+  .d2__hero {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 36px;
+    align-items: start;
+    margin-top: 30px;
+  }
+  .d2__id {
+    font-size: 10px; letter-spacing: 0.2em; color: rgba(157,255,0,0.7);
+    display: flex; gap: 14px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(157,255,0,0.3);
+    border-bottom: 1px solid rgba(157,255,0,0.3);
+    padding: 6px 0;
+  }
+  .d2__id span:first-child { color: #9dff00; font-weight: 700; }
+  .d2__bracket {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: #9dff00;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+  }
+  .d2__bracket::before { content: "▸"; }
+  .d2__bracket::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(157,255,0,0.8), transparent); }
+
+  .d2__h1 {
+    font-family: "Archivo", sans-serif;
+    font-weight: 500;
+    font-size: clamp(48px, 7.4vw, 108px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0 0 18px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  .d2__h1 em {
+    font-style: normal;
+    color: #9dff00;
+    font-weight: 400;
+  }
+  .d2__h1 em::before { content: "["; color: rgba(157,255,0,0.45); margin-right: 6px; }
+  .d2__h1 em::after { content: "]"; color: rgba(157,255,0,0.45); margin-left: 6px; }
+  .d2__h1-glitch { position: relative; }
+  .d2__h1-glitch::after {
+    content: attr(data-txt);
+    position: absolute;
+    left: 2px; top: 0;
+    color: #ff4040;
+    opacity: 0.5;
+    mix-blend-mode: screen;
+    animation: d2-glitch 3.2s infinite;
+    pointer-events: none;
+  }
+  @keyframes d2-glitch {
+    0%,97%,100% { transform: translate(0,0); opacity: 0; }
+    98% { transform: translate(-2px,1px); opacity: 0.6; }
+    99% { transform: translate(3px,-1px); opacity: 0.3; }
+  }
+
+  .d2__sub {
+    font-family: "Archivo", sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: rgba(228,226,219,0.65);
+    max-width: 50ch;
+    margin: 0 0 28px;
+    border-left: 2px solid #9dff00;
+    padding-left: 14px;
+  }
+  .d2__ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+  .d2__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px 14px 18px;
+    background: #9dff00;
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+    transition: all .2s ease;
+  }
+  .d2__cta:hover { filter: brightness(1.15); letter-spacing: 0.22em; }
+  .d2__cta--ghost {
+    background: transparent;
+    color: #9dff00;
+    border: 1px solid rgba(157,255,0,0.4);
+    clip-path: none;
+    padding: 13px 20px;
+  }
+
+  .d2__recon {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    font-size: 10px;
+    color: rgba(228,226,219,0.6);
+  }
+  .d2__recon div {
+    border-left: 2px solid rgba(157,255,0,0.4);
+    padding-left: 8px;
+  }
+  .d2__recon div b { display: block; color: #fff; font-size: 18px; font-weight: 400; font-family: "Archivo", sans-serif; letter-spacing: -0.02em; margin-top: 2px; }
+
+  /* right panel — complex telemetry stack */
+  .d2__stack { display: flex; flex-direction: column; gap: 14px; }
+  .d2__panel {
+    position: relative;
+    border: 1px solid rgba(157,255,0,0.22);
+    background: rgba(10,20,10,0.6);
+    padding: 20px;
+    backdrop-filter: blur(2px);
+  }
+  .d2__panel::before, .d2__panel::after {
+    content: "";
+    position: absolute;
+    width: 14px; height: 14px;
+    border: 2px solid #9dff00;
+  }
+  .d2__panel::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .d2__panel::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+  .d2__panel-label {
+    position: absolute;
+    top: -9px; left: 20px;
+    padding: 0 10px;
+    background: #000;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: #9dff00;
+    text-transform: uppercase;
+  }
+  .d2__panel-label--r { left: auto; right: 20px; }
+  .d2__telem {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .d2__telem-item {
+    border-left: 2px solid #9dff00;
+    padding-left: 10px;
+  }
+  .d2__telem-item .label { font-size: 9px; letter-spacing: 0.22em; color: rgba(228,226,219,0.5); text-transform: uppercase; }
+  .d2__telem-item .value { font-size: 24px; color: #fff; font-weight: 300; letter-spacing: -0.02em; margin-top: 2px; font-family: "Archivo", sans-serif; }
+  .d2__telem-item .unit { font-size: 10px; color: rgba(157,255,0,0.7); font-family: "JetBrains Mono", monospace; }
+
+  .d2__bar { margin-top: 10px; }
+  .d2__bar + .d2__bar { margin-top: 8px; }
+  .d2__bar-label { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(228,226,219,0.6); margin-bottom: 4px; }
+  .d2__bar-track { height: 4px; background: rgba(157,255,0,0.1); position: relative; overflow: hidden; }
+  .d2__bar-fill { position: absolute; top: 0; left: 0; height: 100%; background: #9dff00; box-shadow: 0 0 8px #9dff00; }
+  .d2__bar-fill--a { animation: d2-bar-a 3s ease infinite; }
+  .d2__bar-fill--b { animation: d2-bar-b 4.2s ease infinite; }
+  .d2__bar-fill--c { animation: d2-bar-c 2.6s ease infinite; }
+  @keyframes d2-bar-a { 0%,100% { width: 24%; } 50% { width: 88%; } }
+  @keyframes d2-bar-b { 0%,100% { width: 62%; } 50% { width: 42%; } }
+  @keyframes d2-bar-c { 0%,100% { width: 14%; } 50% { width: 96%; } }
+
+  .d2__waveform {
+    height: 54px;
+    display: flex; align-items: center; gap: 2px;
+    margin: 14px 0 10px;
+  }
+  .d2__waveform span {
+    flex: 1;
+    background: #9dff00;
+    opacity: 0.85;
+    border-radius: 1px;
+    animation: d2-wave 1.3s ease infinite;
+  }
+  @keyframes d2-wave { 0%,100% { height: 20%; } 50% { height: 95%; } }
+
+  .d2__log {
+    font-size: 10.5px;
+    color: rgba(228,226,219,0.55);
+    line-height: 1.7;
+    border-top: 1px dashed rgba(157,255,0,0.3);
+    padding-top: 10px;
+    margin-top: 8px;
+    height: 98px;
+    overflow: hidden;
+    position: relative;
+  }
+  .d2__log::after {
+    content: "";
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 30px;
+    background: linear-gradient(transparent, #000);
+    pointer-events: none;
+  }
+  .d2__log-inner { animation: d2-log 14s linear infinite; }
+  .d2__log div:first-child { color: #9dff00; }
+  @keyframes d2-log { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+
+  .d2__radar {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle, rgba(157,255,0,0.08) 0%, transparent 70%),
+      repeating-radial-gradient(circle, rgba(157,255,0,0.1) 0 1px, transparent 1px 25%);
+    border: 1px solid rgba(157,255,0,0.3);
+    overflow: hidden;
+  }
+  .d2__radar-sweep {
+    position: absolute; inset: 0;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(157,255,0,0.4) 30deg, transparent 60deg);
+    animation: d2-radar 4s linear infinite;
+  }
+  @keyframes d2-radar { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+  .d2__radar::before, .d2__radar::after {
+    content: "";
+    position: absolute;
+    background: rgba(157,255,0,0.2);
+  }
+  .d2__radar::before { top: 50%; left: 0; right: 0; height: 1px; }
+  .d2__radar::after { left: 50%; top: 0; bottom: 0; width: 1px; }
+  .d2__radar-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: #9dff00;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #9dff00;
+    animation: d2-dot 2s ease infinite;
+  }
+  .d2__radar-dot:nth-child(3) { top: 30%; left: 42%; animation-delay: 0s; }
+  .d2__radar-dot:nth-child(4) { top: 62%; left: 58%; animation-delay: .7s; }
+  .d2__radar-dot:nth-child(5) { top: 48%; left: 70%; animation-delay: 1.4s; }
+  @keyframes d2-dot { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: 0.4; } }
+
+  /* prova cards */
+  .d2__sec {
+    margin-top: 90px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(157,255,0,0.25);
+  }
+  .d2__sec-head {
+    font-family: "Archivo", sans-serif;
+    font-weight: 300;
+    font-size: clamp(32px, 4.2vw, 60px);
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin: 20px 0 8px;
+    max-width: 24ch;
+  }
+  .d2__sec-head em { color: #9dff00; font-style: normal; font-weight: 500; }
+  .d2__sec-sub { font-size: 10px; letter-spacing: 0.22em; color: rgba(228,226,219,0.5); text-transform: uppercase; margin-bottom: 28px; }
+
+  .d2__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .d2__card {
+    position: relative;
+    border: 1px solid rgba(157,255,0,0.22);
+    padding: 24px 22px 22px;
+    background: rgba(157,255,0,0.018);
+    transition: all .3s ease;
+  }
+  .d2__card:hover { background: rgba(157,255,0,0.05); border-color: #9dff00; }
+  .d2__card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 20px; height: 20px;
+    border-top: 2px solid #9dff00;
+    border-left: 2px solid #9dff00;
+  }
+  .d2__card-id {
+    position: absolute;
+    top: 12px; right: 14px;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: rgba(157,255,0,0.7);
+  }
+  .d2__card-ord {
+    font-family: "Archivo", sans-serif;
+    font-weight: 200;
+    font-size: 72px;
+    color: #9dff00;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 6px;
+  }
+  .d2__card-l { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(228,226,219,0.5); margin-bottom: 6px; }
+  .d2__card-t { font-family: "Archivo", sans-serif; font-size: 18px; line-height: 1.2; color: #fff; margin-bottom: 14px; font-weight: 500; }
+  .d2__card ul { list-style: none; padding: 0; margin: 0 0 14px; font-size: 11.5px; color: rgba(228,226,219,0.7); }
+  .d2__card ul li { padding: 5px 0; border-top: 1px solid rgba(157,255,0,0.1); display: flex; gap: 8px; line-height: 1.4; }
+  .d2__card ul li::before { content: ">"; color: #9dff00; flex-shrink: 0; }
+  .d2__card-foot { display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 0.18em; color: rgba(157,255,0,0.6); text-transform: uppercase; border-top: 1px dashed rgba(157,255,0,0.2); padding-top: 8px; }
+
+  /* diferenciais as tactical grid */
+  .d2__dif { margin-top: 80px; }
+  .d2__dif-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid rgba(157,255,0,0.25);
+  }
+  .d2__dif-cell {
+    padding: 22px 18px;
+    border-right: 1px solid rgba(157,255,0,0.15);
+    border-bottom: 1px solid rgba(157,255,0,0.15);
+    position: relative;
+    transition: background .3s ease;
+  }
+  .d2__dif-cell:hover { background: rgba(157,255,0,0.05); }
+  .d2__dif-cell:last-child { border-right: none; }
+  .d2__dif-n {
+    font-family: "Archivo", sans-serif;
+    font-weight: 200;
+    font-size: 40px;
+    color: rgba(157,255,0,0.5);
+    line-height: 1;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .d2__dif-n::before { content: "◉ "; font-size: 18px; }
+  .d2__dif-t { font-family: "Archivo", sans-serif; font-size: 14px; color: #fff; font-weight: 500; margin-bottom: 8px; line-height: 1.2; }
+  .d2__dif-d { font-size: 11px; color: rgba(228,226,219,0.6); line-height: 1.4; }
+
+  .d2__foot {
+    margin-top: 80px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(157,255,0,0.25);
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(157,255,0,0.6);
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 900px) {
+    .d2__hero { grid-template-columns: 1fr; }
+    .d2__cards { grid-template-columns: 1fr; }
+    .d2__dif-grid { grid-template-columns: repeat(2, 1fr); }
+    .d2__recon { grid-template-columns: repeat(2, 1fr); }
+    .d2__overlay { font-size: 9px; padding: 8px 14px; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     3 · WAREHOUSE RAW — concreto, grão pesado, marquees, tipografia bleeding
+     ═══════════════════════════════════════════════════════════════════ */
+  .d3 {
+    background: #141110;
+    color: #e8e2d4;
+    font-family: "Syne", sans-serif;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+  .d3::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.22 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+    opacity: 0.55;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .d3__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 5%, rgba(184,50,29,0.38), transparent 38%),
+      radial-gradient(ellipse at 85% 85%, rgba(184,50,29,0.18), transparent 45%),
+      linear-gradient(160deg, rgba(232,226,212,0.03), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .d3__spray {
+    position: absolute;
+    width: 400px; height: 400px;
+    opacity: 0.06;
+    pointer-events: none;
+    z-index: 1;
+    background-image: radial-gradient(circle, #e8e2d4 2px, transparent 3px);
+    background-size: 10px 10px;
+    mask-image: radial-gradient(circle, black 0%, transparent 70%);
+  }
+  .d3__spray--a { top: -100px; right: -80px; }
+  .d3__spray--b { bottom: -150px; left: -100px; width: 600px; height: 600px; }
+
+  /* marquee top */
+  .d3__marquee {
+    position: relative;
+    z-index: 4;
+    overflow: hidden;
+    border-top: 1px solid rgba(232,226,212,0.14);
+    border-bottom: 1px solid rgba(232,226,212,0.14);
+    padding: 12px 0;
+    background: rgba(20,17,16,0.8);
+  }
+  .d3__marquee-track {
+    white-space: nowrap;
+    display: inline-block;
+    animation: d3-marquee 38s linear infinite;
+    font-family: "Syne", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(232,226,212,0.65);
+  }
+  .d3__marquee-track span { margin-right: 40px; }
+  .d3__marquee-track span.hot { color: #b8321d; }
+  .d3__marquee-track i { font-family: "Instrument Serif", serif; font-style: italic; color: #b8321d; margin: 0 6px; text-transform: lowercase; letter-spacing: 0; }
+  @keyframes d3-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .d3__wrap {
+    position: relative;
+    z-index: 3;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  .d3__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #b8321d;
+    border: 1px solid rgba(184,50,29,0.45);
+    padding: 6px 14px;
+    margin-bottom: 40px;
+  }
+  .d3__eyebrow::before {
+    content: "";
+    width: 7px; height: 7px;
+    background: #b8321d;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #b8321d;
+    animation: d3-pulse 1.8s ease infinite;
+  }
+  @keyframes d3-pulse { 0%,100% { opacity: 1; box-shadow: 0 0 12px #b8321d; } 50% { opacity: 0.5; box-shadow: 0 0 4px #b8321d; } }
+
+  .d3__h1 {
+    font-family: "Syne", sans-serif;
+    font-weight: 800;
+    font-size: clamp(62px, 12vw, 200px);
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    margin: 0 0 28px;
+    text-transform: uppercase;
+    color: #e8e2d4;
+    position: relative;
+  }
+  .d3__h1-row { display: block; position: relative; }
+  .d3__h1-row:nth-child(2) { padding-left: 80px; }
+  .d3__h1-row:nth-child(3) { padding-left: 140px; }
+  .d3__h1 em {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-weight: 400;
+    color: #b8321d;
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+  }
+  .d3__h1-strike {
+    display: inline-block;
+    position: relative;
+  }
+  .d3__h1-strike::after {
+    content: "";
+    position: absolute;
+    left: -4%; right: -4%;
+    top: 48%;
+    height: 12px;
+    background: #b8321d;
+    transform: skewY(-3deg);
+    z-index: -1;
+  }
+  .d3__h1-fill {
+    color: transparent;
+    -webkit-text-stroke: 2px #e8e2d4;
+    display: inline-block;
+  }
+
+  /* ornaments beside headline */
+  .d3__ornaments {
+    position: absolute;
+    right: 20px; top: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(232,226,212,0.4);
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.8;
+  }
+  .d3__ornaments .num {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 44px;
+    color: #b8321d;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  .d3__split {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 30px;
+  }
+  .d3__sub {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 24px;
+    line-height: 1.22;
+    color: #e8e2d4;
+    max-width: 28ch;
+    opacity: 0.92;
+  }
+  .d3__sub::before { content: "— "; color: #b8321d; }
+
+  .d3__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .d3__stats > div {
+    border-top: 1px solid rgba(232,226,212,0.22);
+    padding-top: 10px;
+    position: relative;
+  }
+  .d3__stats > div::before {
+    content: "";
+    position: absolute;
+    top: -1px; left: 0; width: 40px; height: 1px;
+    background: #b8321d;
+  }
+  .d3__stats .v { font-family: "Syne", sans-serif; font-weight: 800; font-size: 38px; color: #e8e2d4; line-height: 1; letter-spacing: -0.02em; }
+  .d3__stats .l { font-size: 9px; letter-spacing: 0.22em; color: rgba(232,226,212,0.55); text-transform: uppercase; margin-top: 6px; }
+
+  .d3__ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px; }
+  .d3__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 32px;
+    background: #b8321d;
+    color: #e8e2d4;
+    font-family: "Syne", sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+    transition: all .3s ease;
+    overflow: hidden;
+  }
+  .d3__cta::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: #e8e2d4;
+    transform: translateY(100%);
+    transition: transform .3s ease;
+    z-index: -1;
+  }
+  .d3__cta:hover { color: #b8321d; }
+  .d3__cta:hover::before { transform: translateY(0); }
+  .d3__cta::after { content: "→"; font-size: 18px; transition: transform .3s ease; }
+  .d3__cta:hover::after { transform: translateX(6px); }
+  .d3__cta--ghost {
+    background: transparent;
+    color: #e8e2d4;
+    border: 1px solid rgba(232,226,212,0.3);
+  }
+  .d3__cta--ghost::before { background: #e8e2d4; }
+  .d3__cta--ghost:hover { color: #141110; border-color: #e8e2d4; }
+
+  /* giant bleeding word */
+  .d3__bleed {
+    margin: 80px 0 20px;
+    font-family: "Syne", sans-serif;
+    font-weight: 800;
+    font-size: clamp(80px, 18vw, 320px);
+    line-height: 0.82;
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(232,226,212,0.25);
+    white-space: nowrap;
+    transform: translateX(-4%);
+    pointer-events: none;
+  }
+  .d3__bleed-caption {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-top: 1px solid rgba(232,226,212,0.2);
+    padding-top: 12px;
+    margin-bottom: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(232,226,212,0.55);
+  }
+  .d3__bleed-caption b { color: #b8321d; }
+
+  /* prova cards with overlapping numerals */
+  .d3__sec-head {
+    font-family: "Syne", sans-serif;
+    font-weight: 800;
+    font-size: clamp(42px, 6vw, 92px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+    max-width: 22ch;
+  }
+  .d3__sec-head em {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-weight: 400;
+    color: #b8321d;
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+  }
+  .d3__sec-sub {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 18px;
+    color: rgba(232,226,212,0.7);
+    margin-bottom: 36px;
+  }
+
+  .d3__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .d3__card {
+    background: rgba(232,226,212,0.03);
+    border: 1px solid rgba(232,226,212,0.08);
+    padding: 28px 26px;
+    position: relative;
+    overflow: hidden;
+    transition: all .35s cubic-bezier(.16,1,.3,1);
+  }
+  .d3__card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(184,50,29,0) 0%, rgba(184,50,29,0.14) 100%);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .d3__card:hover {
+    border-color: rgba(184,50,29,0.6);
+    transform: translateY(-6px);
+  }
+  .d3__card:hover::before { opacity: 1; }
+  .d3__card-ord {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 96px;
+    color: #b8321d;
+    line-height: 0.75;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .d3__card-ord::after {
+    content: attr(data-n);
+    position: absolute;
+    top: 0; left: 0;
+    font-size: 180px;
+    opacity: 0.08;
+    color: #e8e2d4;
+    pointer-events: none;
+    font-family: "Syne", sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.8;
+  }
+  .d3__card-l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(232,226,212,0.55);
+    margin-bottom: 10px;
+  }
+  .d3__card-t {
+    font-family: "Syne", sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .d3__card ul { list-style: none; padding: 0; margin: 0 0 18px; font-family: "Instrument Serif", serif; font-size: 16px; line-height: 1.45; font-style: italic; color: #e8e2d4; }
+  .d3__card ul li { padding: 7px 0; border-top: 1px solid rgba(232,226,212,0.08); }
+  .d3__card ul li:first-child { border-top: none; }
+  .d3__card-foot {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: rgba(232,226,212,0.5);
+    border-top: 1px solid rgba(232,226,212,0.12);
+    padding-top: 10px;
+  }
+  .d3__card-foot b { color: #b8321d; font-weight: 500; }
+
+  /* diferenciais — massive numerals with text */
+  .d3__dif { margin-top: 90px; padding-top: 40px; border-top: 1px solid rgba(232,226,212,0.18); }
+  .d3__dif-head {
+    font-family: "Syne", sans-serif;
+    font-weight: 800;
+    font-size: clamp(34px, 5vw, 64px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    margin: 0 0 40px;
+  }
+  .d3__dif-head em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; color: #b8321d; text-transform: lowercase; letter-spacing: -0.02em; }
+  .d3__dif-list { display: flex; flex-direction: column; }
+  .d3__dif-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 2fr 80px;
+    gap: 30px;
+    padding: 26px 0;
+    border-top: 1px solid rgba(232,226,212,0.14);
+    align-items: baseline;
+    transition: all .3s ease;
+    cursor: default;
+  }
+  .d3__dif-row:hover { background: rgba(184,50,29,0.05); padding-left: 20px; }
+  .d3__dif-row:last-child { border-bottom: 1px solid rgba(232,226,212,0.14); }
+  .d3__dif-n {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 72px;
+    color: #b8321d;
+    line-height: 0.8;
+  }
+  .d3__dif-t {
+    font-family: "Syne", sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+  .d3__dif-d {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.4;
+    color: rgba(232,226,212,0.8);
+  }
+  .d3__dif-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: rgba(232,226,212,0.45);
+    text-align: right;
+  }
+
+  .d3__foot {
+    margin-top: 90px; padding-top: 24px;
+    border-top: 1px solid rgba(232,226,212,0.14);
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.18em;
+    color: rgba(232,226,212,0.55);
+    text-transform: uppercase;
+  }
+  .d3__foot b { color: #e8e2d4; font-weight: 500; }
+  .d3__foot-brand {
+    font-family: "Syne", sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    letter-spacing: -0.04em;
+    color: #e8e2d4;
+    line-height: 1;
+  }
+
+  @media (max-width: 900px) {
+    .d3__split { grid-template-columns: 1fr; gap: 32px; }
+    .d3__cards { grid-template-columns: 1fr; }
+    .d3__h1-row:nth-child(2), .d3__h1-row:nth-child(3) { padding-left: 0; }
+    .d3__dif-row { grid-template-columns: 80px 1fr; gap: 16px; }
+    .d3__dif-row > :nth-child(3), .d3__dif-row > :nth-child(4) { grid-column: 2; }
+    .d3__ornaments { display: none; }
+    .d3__foot { grid-template-columns: 1fr; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     4 · RETRO LUTADOR 70s — playbill vitoriano, ornamentos pesados
+     ═══════════════════════════════════════════════════════════════════ */
+  .d4 {
+    background:
+      radial-gradient(ellipse at top, rgba(201,123,40,0.18), transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(139,31,15,0.12), transparent 50%),
+      #e9dcc3;
+    color: #1a1410;
+    font-family: "IBM Plex Sans", sans-serif;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+  }
+  .d4::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(rgba(26,20,16,0.18) 0.8px, transparent 0.8px);
+    background-size: 4px 4px;
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 1;
+  }
+  .d4::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='t'><feTurbulence baseFrequency='0.75' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.102  0 0 0 0 0.078  0 0 0 0 0.063  0 0 0 0.08 0'/></filter><rect width='400' height='400' filter='url(%23t)'/></svg>");
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.8;
+  }
+  .d4__aged {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    opacity: 0.22;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .d4__aged--a { top: 40px; left: 40px; background: radial-gradient(circle, rgba(139,31,15,0.8), transparent 70%); }
+  .d4__aged--b { top: 300px; right: -80px; background: radial-gradient(circle, rgba(201,123,40,0.9), transparent 70%); }
+  .d4__aged--c { bottom: 200px; left: 25%; background: radial-gradient(circle, rgba(26,20,16,0.7), transparent 70%); }
+
+  /* top banner */
+  .d4__banner {
+    position: relative; z-index: 5;
+    background: #1a1410;
+    color: #e9dcc3;
+    text-align: center;
+    padding: 10px 0;
+    font-family: "Special Elite", monospace;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    border-bottom: 3px double #c97b28;
+  }
+  .d4__banner b { color: #c97b28; }
+
+  .d4__wrap {
+    position: relative;
+    z-index: 3;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px 60px;
+  }
+
+  /* big fight poster */
+  .d4__poster {
+    border: 4px double #1a1410;
+    padding: 30px;
+    position: relative;
+    background: rgba(233,220,195,0.6);
+    box-shadow:
+      inset 0 0 0 2px rgba(26,20,16,0.15),
+      inset 0 0 0 10px rgba(201,123,40,0.1),
+      0 14px 0 -4px rgba(26,20,16,0.3);
+  }
+  .d4__poster::before, .d4__poster::after {
+    content: "✦";
+    position: absolute;
+    font-size: 32px;
+    color: #c97b28;
+  }
+  .d4__poster::before { top: 12px; left: 16px; }
+  .d4__poster::after { top: 12px; right: 16px; }
+
+  .d4__corner {
+    position: absolute;
+    width: 50px; height: 50px;
+    border: 3px solid #1a1410;
+  }
+  .d4__corner--bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+  .d4__corner--br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+  .d4__flag {
+    text-align: center;
+    font-family: "Special Elite", monospace;
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    color: #1a1410;
+    border-bottom: 2px solid #1a1410;
+    border-top: 2px solid #1a1410;
+    padding: 8px 0;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .d4__flag::before, .d4__flag::after {
+    content: "❦";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #c97b28;
+    font-size: 14px;
+  }
+  .d4__flag::before { left: 16px; }
+  .d4__flag::after { right: 16px; }
+
+  .d4__presents {
+    text-align: center;
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 18px;
+    color: #c97b28;
+    margin-bottom: 4px;
+  }
+  .d4__presents::before, .d4__presents::after {
+    content: "—";
+    color: #c97b28;
+    margin: 0 12px;
+  }
+
+  .d4__title {
+    font-family: "DM Serif Display", serif;
+    font-weight: 400;
+    font-size: clamp(58px, 12vw, 170px);
+    line-height: 0.85;
+    text-align: center;
+    margin: 0 0 10px;
+    letter-spacing: -0.02em;
+    color: #1a1410;
+    position: relative;
+  }
+  .d4__title em {
+    font-style: italic;
+    color: #c97b28;
+  }
+  .d4__title::before, .d4__title::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    height: 4px;
+    background: #1a1410;
+  }
+  .d4__title::before { left: 0; width: 8%; }
+  .d4__title::after { right: 0; width: 8%; }
+
+  .d4__subtitle {
+    text-align: center;
+    font-family: "Special Elite", monospace;
+    font-size: 13px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(26,20,16,0.72);
+    border-top: 1px dashed #1a1410;
+    border-bottom: 1px dashed #1a1410;
+    padding: 10px 0;
+    margin-bottom: 22px;
+  }
+
+  /* tale of the tape */
+  .d4__tape {
+    margin: 22px 0;
+    border: 2px solid #1a1410;
+    padding: 18px 22px;
+    background: rgba(26,20,16,0.04);
+    position: relative;
+  }
+  .d4__tape-h {
+    position: absolute;
+    top: -12px;
+    left: 50%; transform: translateX(-50%);
+    background: #e9dcc3;
+    padding: 0 16px;
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 22px;
+    color: #c97b28;
+  }
+  .d4__tape-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .d4__fighter {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: "Special Elite", monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    color: rgba(26,20,16,0.85);
+  }
+  .d4__fighter-name {
+    font-family: "DM Serif Display", serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: #1a1410;
+    line-height: 1;
+    margin-bottom: 8px;
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+  .d4__fighter-name em { font-style: italic; color: #c97b28; }
+  .d4__fighter-row {
+    display: flex; justify-content: space-between;
+    border-top: 1px dotted rgba(26,20,16,0.5);
+    padding: 4px 0;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .d4__fighter-row:first-of-type { border-top: 2px solid #1a1410; }
+  .d4__fighter-row span:first-child { color: rgba(26,20,16,0.55); }
+  .d4__fighter-row span:last-child { font-weight: 700; color: #1a1410; }
+  .d4__fighter--right { text-align: right; }
+
+  .d4__vs {
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 92px;
+    color: #c97b28;
+    line-height: 1;
+    transform: rotate(-8deg);
+    text-shadow: 4px 4px 0 #1a1410;
+    position: relative;
+    padding: 0 10px;
+  }
+  .d4__vs::before, .d4__vs::after {
+    content: "";
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    width: 4px; height: 20px;
+    background: #1a1410;
+  }
+  .d4__vs::before { top: -26px; }
+  .d4__vs::after { bottom: -26px; }
+
+  /* halftone strip */
+  .d4__halftone {
+    height: 90px;
+    margin: 20px 0;
+    background-image:
+      radial-gradient(circle, #1a1410 1.2px, transparent 1.2px),
+      radial-gradient(circle, #c97b28 0.8px, transparent 0.8px);
+    background-position: 0 0, 2px 2px;
+    background-size: 6px 6px, 6px 6px;
+    mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 85%, transparent 100%);
+    opacity: 0.7;
+  }
+
+  .d4__ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .d4__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    background: #1a1410;
+    color: #e9dcc3;
+    font-family: "Special Elite", monospace;
+    font-size: 13px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 3px double #1a1410;
+    transition: all .28s ease;
+    position: relative;
+  }
+  .d4__cta::before, .d4__cta::after { content: "✦"; color: #c97b28; font-size: 14px; }
+  .d4__cta:hover {
+    background: #c97b28;
+    color: #1a1410;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 0 -2px rgba(26,20,16,0.6);
+  }
+  .d4__cta--ghost { background: transparent; color: #1a1410; }
+  .d4__cta--ghost:hover { background: #1a1410; color: #e9dcc3; }
+
+  /* stamp badges below poster */
+  .d4__badges {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+  .d4__badge {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    border: 3px double #1a1410;
+    display: flex;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: "Special Elite", monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-align: center;
+    text-transform: uppercase;
+    line-height: 1.2;
+    color: #1a1410;
+    background: rgba(233,220,195,0.5);
+    position: relative;
+    transition: transform .3s ease;
+  }
+  .d4__badge::before {
+    content: "";
+    position: absolute; inset: 8px;
+    border: 1px solid rgba(26,20,16,0.4);
+    border-radius: 50%;
+  }
+  .d4__badge:nth-child(1) { transform: rotate(-7deg); }
+  .d4__badge:nth-child(2) { transform: rotate(4deg) translateY(-6px); background: #c97b28; color: #e9dcc3; }
+  .d4__badge:nth-child(2)::before { border-color: rgba(233,220,195,0.4); }
+  .d4__badge:nth-child(3) { transform: rotate(-4deg); }
+  .d4__badge:hover { transform: scale(1.05); }
+  .d4__badge b {
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 28px;
+    letter-spacing: 0;
+    font-weight: 400;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  /* chapters / prova */
+  .d4__chapters { margin-top: 60px; }
+  .d4__chapters-head {
+    text-align: center;
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(40px, 5vw, 64px);
+    font-style: italic;
+    margin: 0 0 8px;
+    line-height: 1;
+  }
+  .d4__chapters-head::before, .d4__chapters-head::after {
+    content: "§";
+    color: #c97b28;
+    font-size: 40px;
+    margin: 0 14px;
+    vertical-align: 6px;
+  }
+  .d4__chapters-sub {
+    text-align: center;
+    font-family: "Special Elite", monospace;
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(26,20,16,0.6);
+    margin-bottom: 40px;
+  }
+  .d4__chap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .d4__chap {
+    border: 3px double #1a1410;
+    background: rgba(233,220,195,0.55);
+    padding: 30px 24px;
+    position: relative;
+    box-shadow: 0 6px 0 -2px rgba(26,20,16,0.35);
+    transition: transform .28s ease;
+  }
+  .d4__chap:hover { transform: translateY(-4px); box-shadow: 0 12px 0 -4px rgba(26,20,16,0.4); }
+  .d4__chap::before {
+    content: "";
+    position: absolute;
+    top: 10px; left: 10px; right: 10px; bottom: 10px;
+    border: 1px solid rgba(26,20,16,0.3);
+    pointer-events: none;
+  }
+  .d4__chap-stamp {
+    position: absolute;
+    top: -14px; right: -14px;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: #c97b28;
+    color: #e9dcc3;
+    border: 2px solid #1a1410;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 22px;
+    transform: rotate(-12deg);
+  }
+  .d4__chap-ord {
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 76px;
+    line-height: 0.88;
+    color: #c97b28;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .d4__chap-l {
+    font-family: "Special Elite", monospace;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 14px;
+    color: rgba(26,20,16,0.65);
+  }
+  .d4__chap-t {
+    font-family: "DM Serif Display", serif;
+    font-size: 24px;
+    line-height: 1.08;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .d4__chap ul {
+    list-style: none;
+    padding: 0; margin: 0;
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .d4__chap ul li {
+    padding: 6px 0;
+    border-top: 1px dotted rgba(26,20,16,0.4);
+    text-align: center;
+  }
+  .d4__chap ul li:first-child { border-top: none; }
+
+  /* diferenciais as three acts */
+  .d4__acts { margin-top: 70px; }
+  .d4__acts-h {
+    text-align: center;
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: clamp(36px, 5vw, 58px);
+    margin: 0 0 30px;
+  }
+  .d4__acts-h em { color: #c97b28; }
+  .d4__acts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    border-top: 3px double #1a1410;
+    border-bottom: 3px double #1a1410;
+    padding: 24px 0;
+  }
+  .d4__act {
+    padding: 0 16px;
+    border-right: 1px dashed rgba(26,20,16,0.45);
+    text-align: center;
+  }
+  .d4__act:last-child { border-right: none; }
+  .d4__act-n {
+    font-family: "DM Serif Display", serif;
+    font-style: italic;
+    font-size: 54px;
+    color: #c97b28;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .d4__act-t {
+    font-family: "DM Serif Display", serif;
+    font-size: 20px;
+    line-height: 1.08;
+    margin-bottom: 10px;
+  }
+  .d4__act-d { font-size: 13px; line-height: 1.5; color: rgba(26,20,16,0.75); }
+
+  /* playbill footer */
+  .d4__bill {
+    margin-top: 60px;
+    padding: 28px 24px;
+    border: 3px double #1a1410;
+    background: #1a1410;
+    color: #e9dcc3;
+    text-align: center;
+  }
+  .d4__bill-logo {
+    font-family: "DM Serif Display", serif;
+    font-size: 52px;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .d4__bill-logo em { color: #c97b28; font-style: italic; }
+  .d4__bill-meta {
+    font-family: "Special Elite", monospace;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(233,220,195,0.7);
+    border-top: 1px solid rgba(233,220,195,0.3);
+    border-bottom: 1px solid rgba(233,220,195,0.3);
+    padding: 10px 0;
+    margin: 14px 0 8px;
+  }
+
+  @media (max-width: 900px) {
+    .d4__tape-grid { grid-template-columns: 1fr; }
+    .d4__vs { margin: 10px auto; }
+    .d4__fighter--right { text-align: center; }
+    .d4__chap-grid { grid-template-columns: 1fr; }
+    .d4__acts-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 18px; }
+    .d4__act { border-right: none; border-bottom: 1px dashed rgba(26,20,16,0.3); padding-bottom: 18px; }
+    .d4__badges .d4__badge { width: 80px; height: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="chrome">
+  <div class="chrome__brand"><strong>KYRON</strong> · design directions v2</div>
+  <div class="switcher" role="tablist">
+    <button aria-pressed="true" data-target="d1">01 Brutalist Press</button>
+    <button aria-pressed="false" data-target="d2">02 Tactical HUD</button>
+    <button aria-pressed="false" data-target="d3">03 Warehouse Raw</button>
+    <button aria-pressed="false" data-target="d4">04 Retro Lutador</button>
+  </div>
+  <div class="chrome__hint">setas ← → navegam</div>
+</div>
+
+<div class="stage">
+
+  <!-- ══════════════════════════════ 1 · BRUTALIST PRESS ══════════════════════════════ -->
+  <section class="preview d1 is-active" id="d1">
+    <div class="d1__ticker">
+      <div class="d1__ticker-track">
+        <span>◉ VOL. 01</span><span class="hot">BREAKING · WAITLIST ABERTA</span><span>TREINO COM IA · ARTES MARCIAIS</span><span>ABRIL/2026 · EDIÇÃO DE LANÇAMENTO</span><span class="hot">15 SESSÕES/SEMANA MONTADAS</span><span>KYRON SCORE EM TEMPO REAL</span><span>BOXE · MMA · MUAY THAI</span><span class="hot">FUNDADORES RECEBEM PRIORIDADE</span><span>◉ VOL. 01</span><span class="hot">BREAKING · WAITLIST ABERTA</span><span>TREINO COM IA · ARTES MARCIAIS</span><span>ABRIL/2026 · EDIÇÃO DE LANÇAMENTO</span><span class="hot">15 SESSÕES/SEMANA MONTADAS</span><span>KYRON SCORE EM TEMPO REAL</span><span>BOXE · MMA · MUAY THAI</span><span class="hot">FUNDADORES RECEBEM PRIORIDADE</span>
+      </div>
+    </div>
+
+    <div class="d1__wrap">
+      <div class="d1__masthead-row">
+        <div class="l">Est. MMXXVI · Nº 001</div>
+        <div class="d1__masthead-logo">KY<span>★</span>RON</div>
+        <div class="r">Preço: cortesia · Distribuição: digital</div>
+      </div>
+
+      <nav class="d1__subnav">
+        <span><i class="dot"></i>Capa</span>
+        <span>Produto</span>
+        <span>Como Funciona</span>
+        <span>Diferenciais</span>
+        <span>Opinião</span>
+        <span>Waitlist</span>
+        <span>Expediente</span>
+      </nav>
+
+      <div class="d1__hero">
+        <span class="d1__kicker">CAPA · TREINO COM IA · ARTES MARCIAIS</span>
+
+        <h1 class="d1__masthead">
+          Seu treino<br/>
+          <em>deixa de ser</em><br/>
+          improviso.
+        </h1>
+
+        <div class="d1__stickers">
+          <div class="d1__sticker d1__sticker--red d1__sticker--tilt"><b>+50</b>treinadores por trás da base</div>
+          <div class="d1__sticker d1__sticker--tilt2"><b>7</b>modalidades ao vivo</div>
+          <div class="d1__sticker d1__sticker--red"><b>9.0</b>kyron score médio</div>
+        </div>
+      </div>
+
+      <div class="d1__meta">
+        <div><span class="k">Seção</span>Treino · IA · Combate</div>
+        <div><span class="k">Edição</span>Lançamento · PT-BR</div>
+        <div><span class="k">Distribuição</span>Mobile First</div>
+        <div><span class="k">Disciplinas</span>Boxe · MMA · Muay Thai</div>
+        <div><span class="k">Status</span>Waitlist Aberta</div>
+        <div><span class="k">Drop</span>Q2/2026</div>
+      </div>
+
+      <div class="d1__body">
+        <div>
+          <p class="d1__lede">
+            IA que monta a sessão, registra a execução e devolve progresso real. Feito pra quem treina boxe, MMA e rotinas de combate — dentro ou fora da academia.
+          </p>
+
+          <div class="d1__pullquote">
+            Planilhas morreram em 2019. O que ainda não chegou é o que vem depois — e o Kyron é essa resposta.
+            <div class="d1__byline">— depoimento de atleta piloto, SP</div>
+          </div>
+        </div>
+
+        <div class="d1__stack">
+          <p>Enquanto apps genéricos tratam combate como vertical secundária, o Kyron foi desenhado do avesso. O treino nasce do <strong>ambiente</strong>, do <strong>nível</strong> e do <strong>tempo disponível</strong> do atleta. Sem template. Sem enrolação. Entrega do ciclo em cinco segundos.</p>
+          <p>A IA considera disciplina escolhida, calibra volume ao longo das semanas, e devolve evolução em um Kyron Score honesto — que mede consistência, não apenas esforço pontual. O resultado aparece no perfil como XP, streak e ranking.</p>
+          <div class="d1__inset">
+            <div class="d1__inset-h">CAIXA DESTACADA</div>
+            <div class="d1__inset-q">Feito pra ambientes reduzidos — casa, saco de pancada, espaço funcional — sem perder qualidade técnica.</div>
+          </div>
+          <p>Lançamento em edições privadas a partir do segundo semestre. Entrada pela waitlist. Fundadores recebem prioridade e acompanham roadmap de perto, inclusive decisões de produto que ainda estão em debate interno.</p>
+          <p>Três atos compõem a jornada do atleta no app: onboarding (contexto), plano de semana (execução) e progressão (o que ficou). Cada um foi refinado para parecer <strong>produto real</strong>, não demo de feira.</p>
+        </div>
+
+        <div class="d1__right">
+          <div class="d1__round">
+            <div class="d1__round-stamp">ATO<br/>PRIMEIRO</div>
+            <div class="d1__round-n">R1</div>
+            <div class="d1__round-l">ONBOARDING · 7 STEPS</div>
+            <div class="d1__round-t">Contexto entra antes do primeiro treino.</div>
+          </div>
+          <div class="d1__round">
+            <div class="d1__round-stamp">ATO<br/>SEGUNDO</div>
+            <div class="d1__round-n">R2</div>
+            <div class="d1__round-l">PLANO DA SEMANA</div>
+            <div class="d1__round-t">Uma sessão por dia, montada pela IA.</div>
+          </div>
+          <div class="d1__round">
+            <div class="d1__round-stamp">ATO<br/>TERCEIRO</div>
+            <div class="d1__round-n">R3</div>
+            <div class="d1__round-l">PROGRESSÃO · KYRON SCORE</div>
+            <div class="d1__round-t">Consistência vira gráfico. Evolução fica visível.</div>
+          </div>
+        </div>
+
+        <div class="d1__ctas">
+          <a href="#" class="d1__cta">◉ ENTRAR NA WAITLIST</a>
+          <a href="#" class="d1__cta d1__cta--ghost">Ver o produto →</a>
+          <div class="d1__cta-tail">direto do editor — responde em 24h úteis ✎</div>
+        </div>
+      </div>
+
+      <!-- Section — prova -->
+      <section class="d1__sec">
+        <span class="d1__sec-tag">§ PROVA DO PRODUTO</span>
+        <h2 class="d1__sec-head">Mais próximo de um app real do que <em>de uma promessa abstrata.</em></h2>
+
+        <div class="d1__cards">
+          <article>
+            <div class="d1__card-ord">I</div>
+            <div class="d1__card-lbl">ATO PRIMEIRO · ONBOARDING</div>
+            <div class="d1__card-title">Contexto antes do treino</div>
+            <ul class="d1__card-list">
+              <li>Escolha de disciplinas em 7 passos</li>
+              <li>Insight da IA explicando o ciclo</li>
+              <li>Artes marciais, musculação, bola</li>
+              <li>Perfil calibrado pré-sessão</li>
+            </ul>
+            <div class="d1__card-foot"><span>Tempo médio</span><span>3'42"</span></div>
+          </article>
+          <article>
+            <div class="d1__card-ord">II</div>
+            <div class="d1__card-lbl">ATO SEGUNDO · PLANO</div>
+            <div class="d1__card-title">A semana inteira já montada</div>
+            <ul class="d1__card-list">
+              <li>Uma sessão por dia · por modalidade</li>
+              <li>Artes marciais, musculação, bola</li>
+              <li>XP por sessão, calibrado pela IA</li>
+              <li>"Gerar novo treino" sob demanda</li>
+            </ul>
+            <div class="d1__card-foot"><span>Regeneração</span><span>≤ 5s</span></div>
+          </article>
+          <article>
+            <div class="d1__card-ord">III</div>
+            <div class="d1__card-lbl">ATO TERCEIRO · PROGRESSÃO</div>
+            <div class="d1__card-title">Consistência visível</div>
+            <ul class="d1__card-list">
+              <li>Kyron Score 9 — ritmo atual</li>
+              <li>450 XP em 3 treinos</li>
+              <li>2 semanas consecutivas</li>
+              <li>Disciplinas e níveis no mesmo perfil</li>
+            </ul>
+            <div class="d1__card-foot"><span>Cadência</span><span>semanal</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Section — diferenciais (classifieds) -->
+      <section class="d1__class">
+        <h2 class="d1__class-head">O que faz o Kyron parecer <em>produto, não demo</em>.</h2>
+        <div class="d1__class-grid">
+          <div class="d1__ad">
+            <div class="d1__ad-n">01</div>
+            <div class="d1__ad-t">IA que entende contexto</div>
+            <div class="d1__ad-d">O treino nasce do seu ambiente, nível e tempo — não de template genérico.</div>
+          </div>
+          <div class="d1__ad">
+            <div class="d1__ad-n">02</div>
+            <div class="d1__ad-t">Execução sem fricção</div>
+            <div class="d1__ad-d">Séries, descanso e progressão na cara — pra você treinar sem pensar na UI.</div>
+          </div>
+          <div class="d1__ad">
+            <div class="d1__ad-n">03</div>
+            <div class="d1__ad-t">Chat útil, não decorativo</div>
+            <div class="d1__ad-d">Assistente focado em treino, recuperação e performance de combate.</div>
+          </div>
+          <div class="d1__ad">
+            <div class="d1__ad-n">04</div>
+            <div class="d1__ad-t">Gamificação com propósito</div>
+            <div class="d1__ad-d">XP, score e ranking reforçam consistência — nunca poluem a experiência.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- colophon -->
+      <footer class="d1__colophon">
+        <div>
+          <h4>Expediente</h4>
+          <p>Editor · Kyron Athletic Press</p>
+          <p>Redação · São Paulo / Remoto</p>
+          <p>Contato · lucca.vilaca@gmail.com</p>
+        </div>
+        <div>
+          <h4>Distribuição</h4>
+          <p>Waitlist · Q2/2026</p>
+          <p>Plataformas · iOS · Android</p>
+          <p>Idioma · PT-BR (inicial)</p>
+        </div>
+        <div>
+          <h4>Registros</h4>
+          <p>© 2026 Kyron. Todos os direitos reservados.</p>
+          <p>ISSN 0000-0000 · CMYK 80/10/0/100</p>
+          <div class="d1__regmarks"><span></span><span></span><span></span><span></span></div>
+        </div>
+      </footer>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ 2 · TACTICAL HUD ══════════════════════════════ -->
+  <section class="preview d2" id="d2">
+    <div class="d2__overlay">
+      <div class="group">
+        <span>KYRN-SYS v0.4.2</span>
+        <span>LAT -23.5505</span>
+        <span>LNG -46.6333</span>
+        <span>ZONE BR/SP</span>
+      </div>
+      <div class="group">
+        <span class="d2__blink">● REC</span>
+        <span>CH 01</span>
+        <span id="d2-time">00:00:00 UTC</span>
+        <span>BAT 87%</span>
+      </div>
+    </div>
+
+    <div class="d2__corners"><span></span><span></span><span></span><span></span></div>
+    <div class="d2__scan"></div>
+
+    <div class="d2__wrap">
+      <div class="d2__id">
+        <span>◉ SYS.REQ</span>
+        <span>UNIT-0001 · KYRON</span>
+        <span>CLEARANCE: FOUNDER</span>
+        <span>BUILD 04.22-A</span>
+        <span>TGT · AI-SESSION-ENGINE</span>
+      </div>
+
+      <div class="d2__hero">
+        <div>
+          <div class="d2__bracket">TGT :: TREINO CORRETO · AMBIENTE ARBITRÁRIO</div>
+          <h1 class="d2__h1">
+            <span class="d2__h1-glitch" data-txt="Seu treino">Seu treino</span><br/>
+            <em>deixa de ser</em><br/>
+            improviso.
+          </h1>
+          <p class="d2__sub">IA que monta a sessão, registra a execução e devolve progresso real. Feito pra quem treina boxe, MMA e rotinas de combate — dentro ou fora da academia.</p>
+          <div class="d2__ctas">
+            <a href="#" class="d2__cta">◉ ENTRAR NA WAITLIST</a>
+            <a href="#" class="d2__cta d2__cta--ghost">▸ VER PRODUTO</a>
+          </div>
+
+          <div class="d2__recon">
+            <div><span>LAT</span><b>–23.550°</b></div>
+            <div><span>UPTIME</span><b>14d 02:17</b></div>
+            <div><span>SESSÕES / sem</span><b>15</b></div>
+            <div><span>TAXA DE SUCESSO</span><b>93.4%</b></div>
+          </div>
+        </div>
+
+        <div class="d2__stack">
+          <div class="d2__panel">
+            <span class="d2__panel-label">◉ LIVE TELEMETRY</span>
+            <div class="d2__telem">
+              <div class="d2__telem-item">
+                <div class="label">KYRON SCORE</div>
+                <div class="value">09<span class="unit"> /10</span></div>
+              </div>
+              <div class="d2__telem-item">
+                <div class="label">XP · CICLO</div>
+                <div class="value">450<span class="unit"> xp</span></div>
+              </div>
+              <div class="d2__telem-item">
+                <div class="label">STREAK</div>
+                <div class="value">14<span class="unit"> dias</span></div>
+              </div>
+              <div class="d2__telem-item">
+                <div class="label">SESSÕES · SEM</div>
+                <div class="value">23<span class="unit"> /15</span></div>
+              </div>
+            </div>
+            <div class="d2__bar">
+              <div class="d2__bar-label"><span>HEART ZONE 03</span><span class="d2__blink">ACTIVE</span></div>
+              <div class="d2__bar-track"><div class="d2__bar-fill d2__bar-fill--a"></div></div>
+            </div>
+            <div class="d2__bar">
+              <div class="d2__bar-label"><span>RECOVERY INDEX</span><span>+6%</span></div>
+              <div class="d2__bar-track"><div class="d2__bar-fill d2__bar-fill--b"></div></div>
+            </div>
+            <div class="d2__bar">
+              <div class="d2__bar-label"><span>EXPLOSIVENESS</span><span>PEAK</span></div>
+              <div class="d2__bar-track"><div class="d2__bar-fill d2__bar-fill--c"></div></div>
+            </div>
+
+            <div class="d2__waveform">
+              <span style="animation-delay: 0s"></span><span style="animation-delay: .05s"></span>
+              <span style="animation-delay: .1s"></span><span style="animation-delay: .15s"></span>
+              <span style="animation-delay: .2s"></span><span style="animation-delay: .25s"></span>
+              <span style="animation-delay: .3s"></span><span style="animation-delay: .35s"></span>
+              <span style="animation-delay: .4s"></span><span style="animation-delay: .45s"></span>
+              <span style="animation-delay: .5s"></span><span style="animation-delay: .55s"></span>
+              <span style="animation-delay: .6s"></span><span style="animation-delay: .65s"></span>
+              <span style="animation-delay: .7s"></span><span style="animation-delay: .75s"></span>
+              <span style="animation-delay: .8s"></span><span style="animation-delay: .85s"></span>
+              <span style="animation-delay: .9s"></span><span style="animation-delay: .95s"></span>
+              <span style="animation-delay: 1s"></span><span style="animation-delay: 1.05s"></span>
+              <span style="animation-delay: 1.1s"></span><span style="animation-delay: 1.15s"></span>
+            </div>
+            <div class="d2__log">
+              <div class="d2__log-inner">
+                <div>▸ 14:22:07 — sessão gerada · muay thai · 45 min · casa</div>
+                <div>▸ 14:22:08 — 6 rounds manopla · 3× sprawl · shadow</div>
+                <div>▸ 14:22:09 — score calibrado · dif +2 (user consent)</div>
+                <div>▸ 14:22:11 — ready :: aguardando execução</div>
+                <div>▸ 14:22:45 — heart-rate captured · zone 03 stable</div>
+                <div>▸ 14:23:12 — round 1/6 · início · tempo 03:00</div>
+                <div>▸ 14:26:14 — round 1/6 · fim · pico 162bpm</div>
+                <div>▸ 14:26:20 — intervalo · 60s · respiração registrada</div>
+                <div>▸ 14:22:07 — sessão gerada · muay thai · 45 min · casa</div>
+                <div>▸ 14:22:08 — 6 rounds manopla · 3× sprawl · shadow</div>
+                <div>▸ 14:22:09 — score calibrado · dif +2 (user consent)</div>
+                <div>▸ 14:22:11 — ready :: aguardando execução</div>
+                <div>▸ 14:22:45 — heart-rate captured · zone 03 stable</div>
+                <div>▸ 14:23:12 — round 1/6 · início · tempo 03:00</div>
+                <div>▸ 14:26:14 — round 1/6 · fim · pico 162bpm</div>
+                <div>▸ 14:26:20 — intervalo · 60s · respiração registrada</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d2__panel">
+            <span class="d2__panel-label">◉ PERIM. SCAN</span>
+            <span class="d2__panel-label d2__panel-label--r">RNG 04km</span>
+            <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap: 14px; align-items:center;">
+              <div class="d2__radar">
+                <div class="d2__radar-sweep"></div>
+                <div class="d2__radar-dot"></div>
+                <div class="d2__radar-dot"></div>
+                <div class="d2__radar-dot"></div>
+              </div>
+              <div>
+                <div style="font-size:10px; letter-spacing:0.22em; color:#9dff00; text-transform:uppercase; margin-bottom:8px;">3 TGT acquired</div>
+                <div style="font-size:10.5px; line-height: 1.7; color: rgba(228,226,219,0.7);">
+                  <div>◉ ALVO α · ONBOARD</div>
+                  <div>◉ ALVO β · PLANO</div>
+                  <div>◉ ALVO γ · PROGRESS</div>
+                </div>
+                <div style="margin-top: 12px; font-size:9px; letter-spacing:0.2em; color: rgba(157,255,0,0.7); text-transform:uppercase;">STATUS · LOCKED</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- prova -->
+      <section class="d2__sec">
+        <div class="d2__bracket">PACKAGE :: PROVA DO PRODUTO</div>
+        <h2 class="d2__sec-head">Mais próximo de um app <em>real</em> do que de uma promessa abstrata.</h2>
+        <div class="d2__sec-sub">3 módulos · 12 rotinas · 1 sistema</div>
+        <div class="d2__cards">
+          <article class="d2__card">
+            <div class="d2__card-id">PKT-01/03</div>
+            <div class="d2__card-ord">01</div>
+            <div class="d2__card-l">MODULE · ONBOARDING</div>
+            <div class="d2__card-t">Contexto entra antes do treino</div>
+            <ul>
+              <li>Escolha de disciplinas em 7 passos</li>
+              <li>Insight da IA explicando cada ciclo</li>
+              <li>Artes marciais · musculação · esportes c/ bola</li>
+              <li>Perfil calibrado pré-sessão</li>
+            </ul>
+            <div class="d2__card-foot"><span>T_AVG</span><span>03:42</span></div>
+          </article>
+          <article class="d2__card">
+            <div class="d2__card-id">PKT-02/03</div>
+            <div class="d2__card-ord">02</div>
+            <div class="d2__card-l">MODULE · WEEK PLAN</div>
+            <div class="d2__card-t">Semana inteira já montada</div>
+            <ul>
+              <li>Uma sessão por dia · por modalidade</li>
+              <li>XP por sessão · calibrado pela IA</li>
+              <li>Regeneração do treino sob demanda</li>
+              <li>Cadência respirada no calendário</li>
+            </ul>
+            <div class="d2__card-foot"><span>T_REGEN</span><span>≤ 05:00</span></div>
+          </article>
+          <article class="d2__card">
+            <div class="d2__card-id">PKT-03/03</div>
+            <div class="d2__card-ord">03</div>
+            <div class="d2__card-l">MODULE · PROGRESSION</div>
+            <div class="d2__card-t">Consistência visível</div>
+            <ul>
+              <li>Kyron Score 9 — ritmo atual</li>
+              <li>450 XP em 3 treinos</li>
+              <li>2 semanas consecutivas</li>
+              <li>Disciplinas + níveis no mesmo perfil</li>
+            </ul>
+            <div class="d2__card-foot"><span>SAMPLING</span><span>WEEKLY</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- diferenciais -->
+      <section class="d2__dif">
+        <div class="d2__bracket">VECTOR :: DIFERENCIAIS</div>
+        <h2 class="d2__sec-head">Produto, <em>não demo</em>.</h2>
+        <div class="d2__dif-grid">
+          <div class="d2__dif-cell">
+            <div class="d2__dif-n">01</div>
+            <div class="d2__dif-t">IA contextual</div>
+            <div class="d2__dif-d">Treino nasce do ambiente, nível, tempo. Sem template.</div>
+          </div>
+          <div class="d2__dif-cell">
+            <div class="d2__dif-n">02</div>
+            <div class="d2__dif-t">Execução sem fricção</div>
+            <div class="d2__dif-d">Séries, descanso, progressão com clareza. Zero atrito.</div>
+          </div>
+          <div class="d2__dif-cell">
+            <div class="d2__dif-n">03</div>
+            <div class="d2__dif-t">Chat útil</div>
+            <div class="d2__dif-d">Focado em treino, recuperação e performance de combate.</div>
+          </div>
+          <div class="d2__dif-cell">
+            <div class="d2__dif-n">04</div>
+            <div class="d2__dif-t">Game com propósito</div>
+            <div class="d2__dif-d">XP, score, ranking reforçam consistência — nada decorativo.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="d2__foot">
+        <span>◉ END OF FEED</span>
+        <span>KYRN-SYS · V0.4.2</span>
+        <span>© MMXXVI KYRON</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ 3 · WAREHOUSE RAW ══════════════════════════════ -->
+  <section class="preview d3" id="d3">
+    <div class="d3__bg"></div>
+    <div class="d3__spray d3__spray--a"></div>
+    <div class="d3__spray d3__spray--b"></div>
+
+    <div class="d3__marquee">
+      <div class="d3__marquee-track">
+        <span>KYRON</span><i>·</i><span class="hot">treino com ia</span><i>·</i><span>artes marciais</span><i>·</i><span class="hot">boxe · mma · muay thai</span><i>·</i><span>waitlist aberta</span><i>·</i><span class="hot">edição fundadores</span><i>·</i><span>q2/2026</span><i>·</i>
+        <span>KYRON</span><i>·</i><span class="hot">treino com ia</span><i>·</i><span>artes marciais</span><i>·</i><span class="hot">boxe · mma · muay thai</span><i>·</i><span>waitlist aberta</span><i>·</i><span class="hot">edição fundadores</span><i>·</i><span>q2/2026</span><i>·</i>
+      </div>
+    </div>
+
+    <div class="d3__wrap">
+      <div class="d3__eyebrow">TREINO COM IA · ARTES MARCIAIS</div>
+
+      <h1 class="d3__h1">
+        <span class="d3__h1-row">SEU TREINO</span>
+        <span class="d3__h1-row"><em>deixa de ser</em></span>
+        <span class="d3__h1-row"><span class="d3__h1-fill">IMPROVI</span><span class="d3__h1-strike">SO.</span></span>
+        <div class="d3__ornaments">
+          <div>Nº 001 / 2026</div>
+          <div class="num">§</div>
+          <div>Kyron Athletic</div>
+        </div>
+      </h1>
+
+      <div class="d3__split">
+        <p class="d3__sub">
+          IA que monta a sessão, registra a execução e devolve progresso real. Feito pra quem treina combate dentro ou fora da academia — do CT ao condomínio, do saco à manopla.
+        </p>
+        <div class="d3__stats">
+          <div>
+            <div class="v">15</div>
+            <div class="l">sessões / semana</div>
+          </div>
+          <div>
+            <div class="v">07</div>
+            <div class="l">modalidades suportadas</div>
+          </div>
+          <div>
+            <div class="v">9.0</div>
+            <div class="l">kyron score médio</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d3__ctas">
+        <a href="#" class="d3__cta">Entrar na waitlist</a>
+        <a href="#" class="d3__cta d3__cta--ghost">Ver o produto</a>
+      </div>
+
+      <!-- massive bleeding word -->
+      <div class="d3__bleed">IMPROVISO · ACABOU · IMPROVISO · ACABOU ·</div>
+      <div class="d3__bleed-caption">
+        <span>No lugar dele: <b>CONTEXTO · CÁLCULO · CONSISTÊNCIA</b></span>
+        <span>03 atos · 01 sistema</span>
+      </div>
+
+      <!-- prova -->
+      <h2 class="d3__sec-head">Mais próximo de um app real do que <em>de uma promessa abstrata.</em></h2>
+      <p class="d3__sec-sub">três atos, desenhados do avesso, para quem treina no escuro às cinco da manhã.</p>
+
+      <div class="d3__cards">
+        <article class="d3__card">
+          <div class="d3__card-ord" data-n="I.">I.</div>
+          <div class="d3__card-l">ATO PRIMEIRO · ONBOARDING</div>
+          <div class="d3__card-t">Contexto antes do treino</div>
+          <ul>
+            <li>Escolha de disciplinas em 7 passos</li>
+            <li>Insight da IA em cada ciclo</li>
+            <li>Artes marciais, musculação, esportes com bola</li>
+            <li>Perfil calibrado pré-sessão</li>
+          </ul>
+          <div class="d3__card-foot"><span>tempo médio</span><b>03:42</b></div>
+        </article>
+        <article class="d3__card">
+          <div class="d3__card-ord" data-n="II.">II.</div>
+          <div class="d3__card-l">ATO SEGUNDO · PLANO</div>
+          <div class="d3__card-t">Semana inteira montada</div>
+          <ul>
+            <li>Uma sessão por dia, por modalidade</li>
+            <li>XP calibrado pela IA</li>
+            <li>"Gerar novo treino" sob demanda</li>
+            <li>Rotina que respira no calendário</li>
+          </ul>
+          <div class="d3__card-foot"><span>regeneração</span><b>≤ 05s</b></div>
+        </article>
+        <article class="d3__card">
+          <div class="d3__card-ord" data-n="III.">III.</div>
+          <div class="d3__card-l">ATO TERCEIRO · PROGRESSÃO</div>
+          <div class="d3__card-t">Consistência visível</div>
+          <ul>
+            <li>Kyron Score 9 — ritmo atual</li>
+            <li>450 XP em 3 treinos</li>
+            <li>2 semanas consecutivas</li>
+            <li>Disciplinas no mesmo perfil</li>
+          </ul>
+          <div class="d3__card-foot"><span>cadência</span><b>semanal</b></div>
+        </article>
+      </div>
+
+      <!-- diferenciais -->
+      <section class="d3__dif">
+        <h2 class="d3__dif-head">O que faz o Kyron parecer <em>produto, não demo</em>.</h2>
+        <div class="d3__dif-list">
+          <div class="d3__dif-row">
+            <div class="d3__dif-n">01.</div>
+            <div class="d3__dif-t">IA que entende contexto</div>
+            <div class="d3__dif-d">O treino nasce do seu ambiente, nível e tempo disponível — nunca de template genérico. Funciona pra academia, mas também pra boxe e MMA com estrutura reduzida.</div>
+            <div class="d3__dif-tag">§ núcleo</div>
+          </div>
+          <div class="d3__dif-row">
+            <div class="d3__dif-n">02.</div>
+            <div class="d3__dif-t">Execução sem fricção</div>
+            <div class="d3__dif-d">Séries, descanso e progressão aparecem com clareza pra você treinar sem pensar na interface. O cronômetro é uma frase, não um menu.</div>
+            <div class="d3__dif-tag">§ interface</div>
+          </div>
+          <div class="d3__dif-row">
+            <div class="d3__dif-n">03.</div>
+            <div class="d3__dif-t">Chat útil, não decorativo</div>
+            <div class="d3__dif-d">Um assistente focado em treino, recuperação e performance de combate. Tom direto e contextual — lembra o seu histórico sem pedir permissão pra existir.</div>
+            <div class="d3__dif-tag">§ conversa</div>
+          </div>
+          <div class="d3__dif-row">
+            <div class="d3__dif-n">04.</div>
+            <div class="d3__dif-t">Gamificação com propósito</div>
+            <div class="d3__dif-d">XP, score e ranking existem pra reforçar consistência — não pra poluir a experiência com ruído. Progresso vira gráfico, gráfico vira comportamento.</div>
+            <div class="d3__dif-tag">§ incentivo</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- footer -->
+      <footer class="d3__foot">
+        <div>
+          <div class="d3__foot-brand">KYRON<em style="font-family:'Instrument Serif',serif; font-style:italic; color:#b8321d;">.</em></div>
+          <p style="margin-top: 10px;">equipe de desenvolvimento kyron</p>
+          <p>© mmxxvi · todos os direitos reservados</p>
+        </div>
+        <div>
+          <b>Entrar na waitlist</b><br/>
+          lucca.vilaca@gmail.com<br/><br/>
+          <b>Onde estamos</b><br/>
+          SP · BR · remoto
+        </div>
+      </footer>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════ 4 · RETRO LUTADOR 70s ══════════════════════════════ -->
+  <section class="preview d4" id="d4">
+    <div class="d4__banner">
+      ✦ <b>Sábado, 12 de Dezembro</b> ✦ Uma única apresentação ✦ <b>7 em ponto</b> ✦ ingresso pela waitlist ✦
+    </div>
+
+    <div class="d4__aged d4__aged--a"></div>
+    <div class="d4__aged d4__aged--b"></div>
+    <div class="d4__aged d4__aged--c"></div>
+
+    <div class="d4__wrap">
+      <div class="d4__poster">
+        <div class="d4__corner d4__corner--bl"></div>
+        <div class="d4__corner d4__corner--br"></div>
+
+        <div class="d4__flag">KYRON ATHLETIC &mdash; EST. MMXXVI &mdash; EDIÇÃO FUNDADORES</div>
+        <div class="d4__presents">Kyron tem a honra de apresentar</div>
+
+        <h1 class="d4__title">
+          Seu Treino<br/>
+          <em>deixa de ser</em><br/>
+          Improviso.
+        </h1>
+
+        <div class="d4__subtitle">Uma produção em três atos &middot; IA &middot; Combate &middot; Rotina</div>
+
+        <!-- tale of the tape -->
+        <div class="d4__tape">
+          <div class="d4__tape-h">— Tale of the Tape —</div>
+          <div class="d4__tape-grid">
+            <div class="d4__fighter">
+              <div class="d4__fighter-name">O <em>Atleta</em></div>
+              <div class="d4__fighter-row"><span>Ambiente</span><span>Casa · academia</span></div>
+              <div class="d4__fighter-row"><span>Disciplina</span><span>Combate</span></div>
+              <div class="d4__fighter-row"><span>Tempo</span><span>30 a 90 min</span></div>
+              <div class="d4__fighter-row"><span>Arsenal</span><span>Saco · manopla</span></div>
+              <div class="d4__fighter-row"><span>Missão</span><span>Consistência</span></div>
+            </div>
+            <div class="d4__vs">&times;</div>
+            <div class="d4__fighter d4__fighter--right">
+              <div class="d4__fighter-name">O <em>Improviso</em></div>
+              <div class="d4__fighter-row"><span>Template</span><span>Genérico</span></div>
+              <div class="d4__fighter-row"><span>Plano</span><span>Nenhum</span></div>
+              <div class="d4__fighter-row"><span>Progresso</span><span>Invisível</span></div>
+              <div class="d4__fighter-row"><span>Retenção</span><span>Quebrada</span></div>
+              <div class="d4__fighter-row"><span>Destino</span><span>Desistência</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d4__halftone"></div>
+
+        <div class="d4__ctas">
+          <a href="#" class="d4__cta">Entrar na Waitlist</a>
+          <a href="#" class="d4__cta d4__cta--ghost">Ver o Produto</a>
+        </div>
+      </div>
+
+      <!-- badges abaixo do poster -->
+      <div class="d4__badges">
+        <div class="d4__badge"><b>I</b>Ato Primeiro · Onboarding</div>
+        <div class="d4__badge"><b>II</b>Ato Segundo · Plano</div>
+        <div class="d4__badge"><b>III</b>Ato Terceiro · Progresso</div>
+      </div>
+
+      <!-- chapters -->
+      <section class="d4__chapters">
+        <h2 class="d4__chapters-head">Mais próximo de um <em>app real</em></h2>
+        <div class="d4__chapters-sub">&mdash; do que de uma promessa abstrata &mdash;</div>
+        <div class="d4__chap-grid">
+          <article class="d4__chap">
+            <div class="d4__chap-stamp">I</div>
+            <div class="d4__chap-ord">I.</div>
+            <div class="d4__chap-l">Ato Primeiro · Onboarding</div>
+            <div class="d4__chap-t">Seu contexto entra <em>antes</em> do treino</div>
+            <ul>
+              <li>Escolha em sete passos</li>
+              <li>Insight da IA por ciclo</li>
+              <li>Perfil calibrado de saída</li>
+              <li>Contexto antes da sessão</li>
+            </ul>
+          </article>
+          <article class="d4__chap">
+            <div class="d4__chap-stamp">II</div>
+            <div class="d4__chap-ord">II.</div>
+            <div class="d4__chap-l">Ato Segundo · Plano</div>
+            <div class="d4__chap-t">A semana já montada <em>para você</em></div>
+            <ul>
+              <li>Uma sessão por dia</li>
+              <li>XP calibrado pela IA</li>
+              <li>"Gerar novo treino"</li>
+              <li>Rotina respirada</li>
+            </ul>
+          </article>
+          <article class="d4__chap">
+            <div class="d4__chap-stamp">III</div>
+            <div class="d4__chap-ord">III.</div>
+            <div class="d4__chap-l">Ato Terceiro · Progresso</div>
+            <div class="d4__chap-t">Consistência <em>visível</em> no perfil</div>
+            <ul>
+              <li>Kyron Score 9</li>
+              <li>450 XP em 3 treinos</li>
+              <li>2 semanas seguidas</li>
+              <li>Evolução percebida</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- atos / diferenciais -->
+      <section class="d4__acts">
+        <h2 class="d4__acts-h">Por que o Kyron parece <em>produto</em>, não demo</h2>
+        <div class="d4__acts-grid">
+          <div class="d4__act">
+            <div class="d4__act-n">I.</div>
+            <div class="d4__act-t">IA que entende o contexto</div>
+            <div class="d4__act-d">O treino nasce do seu ambiente, nível e tempo — nunca de um template genérico.</div>
+          </div>
+          <div class="d4__act">
+            <div class="d4__act-n">II.</div>
+            <div class="d4__act-t">Execução sem fricção</div>
+            <div class="d4__act-d">Séries, descanso, progressão com clareza pra você treinar sem pensar na interface.</div>
+          </div>
+          <div class="d4__act">
+            <div class="d4__act-n">III.</div>
+            <div class="d4__act-t">Chat útil, não decorativo</div>
+            <div class="d4__act-d">Assistente focado em treino, recuperação e performance — direto e contextual.</div>
+          </div>
+          <div class="d4__act">
+            <div class="d4__act-n">IV.</div>
+            <div class="d4__act-t">Gamificação com propósito</div>
+            <div class="d4__act-d">XP, score e ranking servem pra reforçar consistência — não pra poluir a UI.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- playbill footer -->
+      <footer class="d4__bill">
+        <div class="d4__bill-logo">K<em>y</em>RON</div>
+        <div class="d4__bill-meta">&mdash; Athletic Press &middot; Est. MMXXVI &middot; São Paulo &middot; Brasil &mdash;</div>
+        <div style="font-family: 'Special Elite', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(233,220,195,0.6);">© 2026 &middot; todos os direitos reservados &middot; lucca.vilaca@gmail.com</div>
+      </footer>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  (function () {
+    const buttons = document.querySelectorAll('.switcher button');
+    const previews = document.querySelectorAll('.preview');
+    function activate(targetId) {
+      previews.forEach((p) => p.classList.toggle('is-active', p.id === targetId));
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.target === targetId)));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      history.replaceState(null, '', '#' + targetId);
+    }
+    buttons.forEach((b) => b.addEventListener('click', () => activate(b.dataset.target)));
+
+    const order = ['d1','d2','d3','d4'];
+    document.addEventListener('keydown', (e) => {
+      const current = document.querySelector('.preview.is-active').id;
+      const idx = order.indexOf(current);
+      if (e.key === 'ArrowRight') activate(order[(idx + 1) % order.length]);
+      if (e.key === 'ArrowLeft')  activate(order[(idx - 1 + order.length) % order.length]);
+    });
+
+    const initial = window.location.hash.replace('#', '');
+    if (order.includes(initial)) activate(initial);
+
+    const timeEl = document.getElementById('d2-time');
+    if (timeEl) {
+      setInterval(() => {
+        const now = new Date();
+        const h = String(now.getUTCHours()).padStart(2,'0');
+        const m = String(now.getUTCMinutes()).padStart(2,'0');
+        const s = String(now.getUTCSeconds()).padStart(2,'0');
+        timeEl.textContent = `${h}:${m}:${s} UTC`;
+      }, 1000);
+    }
+  })();
+</script>
+
+</body>
+</html>

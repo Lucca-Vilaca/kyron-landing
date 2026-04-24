@@ -30,7 +30,7 @@ export function Hero() {
       <div className="relative z-10 flex flex-col items-start gap-8">
         <Eyebrow>{eyebrow}</Eyebrow>
 
-        <h1 className="font-display text-[clamp(52px,9vw,132px)] font-medium leading-[0.88] tracking-[-0.035em] text-ink text-balance max-w-[14ch]">
+        <h1 className="font-display text-[clamp(44px,7vw,104px)] leading-[0.95] tracking-[-0.02em] text-ink text-balance max-w-[14ch]">
           <m.span className="block" {...lineAnim(0)}>
             {headingBefore}
           </m.span>
@@ -43,7 +43,7 @@ export function Hero() {
         </h1>
 
         <m.p
-          className="max-w-[52ch] text-[15px] leading-relaxed text-ink-muted md:text-[17px]"
+          className="max-w-[52ch] text-[14px] leading-relaxed text-ink-muted md:text-[15px]"
           {...(prefersReduced
             ? {}
             : {
@@ -84,8 +84,7 @@ export function Hero() {
             })}
       >
         <PhoneMockup
-          src="/assets/iphone16-home.webp"
-          srcAvif="/assets/iphone16-home.avif"
+          src="/assets/mockups/02-home.svg"
           alt="Tela inicial do Kyron com o treino de muay thai do dia pronto para começar"
           priority
         />

@@ -1,20 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import "./globals.css";
 
-const fraunces = Fraunces({
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400"],
   style: ["normal", "italic"],
-  variable: "--font-fraunces",
+  variable: "--font-instrument-serif",
   display: "swap",
 });
 
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
@@ -41,7 +48,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${fraunces.variable} ${inter.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`${instrumentSerif.variable} ${geist.variable} ${geistMono.variable}`}
+    >
       <body>
         <MotionProvider>{children}</MotionProvider>
       </body>

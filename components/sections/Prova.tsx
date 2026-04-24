@@ -39,7 +39,7 @@ export function Prova() {
           >
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute -right-2 -top-6 font-display text-[110px] font-semibold leading-none text-gold/[0.08]"
+              className="pointer-events-none absolute -right-2 -top-6 font-mono text-[76px] font-medium leading-none tracking-tight text-gold/[0.08]"
             >
               {card.ordinal}
             </span>
@@ -54,10 +54,10 @@ export function Prova() {
             </div>
 
             <p className="text-[11px] uppercase tracking-[0.2em] text-gold">{card.label}</p>
-            <h3 className="mt-3 font-display text-[22px] font-semibold leading-tight text-ink">
+            <h3 className="mt-3 font-display text-[20px] leading-tight tracking-[-0.01em] text-ink">
               {card.title}
             </h3>
-            <ul className="mt-5 flex flex-col gap-2 text-[14px] text-ink-muted">
+            <ul className="mt-5 flex flex-col gap-2 text-[13px] text-ink-muted">
               {card.items.map((item) => (
                 <li key={item} className="flex gap-2">
                   <span aria-hidden="true" className="text-gold">

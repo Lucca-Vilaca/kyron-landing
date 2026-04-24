@@ -33,15 +33,15 @@ export function ComoFunciona() {
           >
             <span
               aria-hidden="true"
-              className="pointer-events-none block font-display text-[96px] font-semibold leading-none text-gold/20"
+              className="pointer-events-none block font-mono text-[64px] font-medium leading-none tracking-tight text-gold/20"
             >
               {step.number}
             </span>
-            <h3 className="mt-2 font-display text-[24px] font-semibold leading-tight text-ink">
+            <h3 className="mt-2 font-display text-[20px] leading-tight tracking-[-0.01em] text-ink">
               {step.title}
             </h3>
-            <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">{step.description}</p>
-            <p className="mt-5 font-display text-[14px] italic text-gold/80">{step.example}</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-ink-muted">{step.description}</p>
+            <p className="mt-5 font-display text-[13px] italic text-gold/80">{step.example}</p>
           </StaggerItem>
         ))}
       </Stagger>

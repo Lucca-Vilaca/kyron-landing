@@ -46,7 +46,7 @@ export function Header() {
           alt=""
           className="h-7 w-7 object-contain"
         />
-        <span className="font-display text-[15px] font-semibold tracking-wide">KYRON</span>
+        <span className="text-[13px] font-semibold uppercase tracking-[0.24em] text-ink">Kyron</span>
       </a>
 
       <nav className="hidden md:flex items-center gap-7" aria-label="Navegação principal">
@@ -99,7 +99,7 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="font-display text-4xl text-ink"
+                className="font-display text-3xl text-ink"
               >
                 {item.label}
               </a>
