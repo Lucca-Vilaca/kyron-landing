@@ -1,25 +1,41 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #09090b;
-  --color-bg-soft: #111114;
-  --color-bg-card: rgba(255, 255, 255, 0.04);
-  --color-ink: #f5f1e8;
-  --color-ink-muted: #9a9288;
-  --color-line: rgba(255, 255, 255, 0.08);
-  --color-gold: #d8b25b;
-  --color-gold-soft: #f2d18a;
-  --color-crimson: #8f2d1d;
+  /* ── Obsidian Steel palette ─────────────────────────────── */
+  --color-obsidian: #0A0D10;
+  --color-obsidian-2: #10141A;
+  --color-obsidian-3: #161B22;
+  --color-ink: #E8EEF2;
+  --color-ink-dim: #8FA0AE;
+  --color-ink-muted: #5A6B78;
+  --color-line: rgba(232, 238, 242, 0.10);
+  --color-line-2: rgba(232, 238, 242, 0.18);
 
-  --font-display: var(--font-instrument-serif);
-  --font-sans: var(--font-geist);
-  --font-mono: var(--font-geist-mono);
+  --color-steel: #7FA9C4;
+  --color-steel-soft: #A7C6DB;
+  --color-steel-deep: #3D5D75;
+  --color-marine: #2E4A5E;
+  --color-marine-deep: #1A2C3A;
+  --color-mist: #D6E0E8;
 
-  --radius-sm: 4px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  /* Legacy aliases kept so existing className tokens still resolve */
+  --color-bg: #0A0D10;
+  --color-bg-soft: #10141A;
+  --color-bg-card: rgba(232, 238, 242, 0.03);
+  --color-gold: #7FA9C4;
+  --color-gold-soft: #A7C6DB;
+  --color-crimson: #2E4A5E;
 
-  --container-landing: 1240px;
+  --font-display: var(--font-archivo-black);
+  --font-editorial: var(--font-fraunces);
+  --font-sans: var(--font-archivo);
+  --font-mono: var(--font-jetbrains);
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  --container-landing: 1360px;
 }
 
 @layer base {
@@ -29,15 +45,17 @@
 
   body {
     color: var(--color-ink);
-    font-family: var(--font-sans), system-ui, sans-serif;
-    font-feature-settings: "ss01", "cv11";
-    letter-spacing: -0.01em;
+    font-family: var(--font-sans), -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: 0;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     background:
-      radial-gradient(circle at top left, rgba(143, 45, 29, 0.28), transparent 35%),
-      radial-gradient(circle at 80% 15%, rgba(216, 178, 91, 0.15), transparent 30%),
-      linear-gradient(180deg, #0d0d10 0%, #09090b 45%, #060607 100%);
+      radial-gradient(ellipse at 18% 12%, rgba(46, 74, 94, 0.22), transparent 48%),
+      radial-gradient(ellipse at 82% 82%, rgba(127, 169, 196, 0.10), transparent 48%),
+      linear-gradient(180deg, #0A0D10 0%, #08090C 60%, #050608 100%);
+    overflow-x: hidden;
   }
 
   body::before {
@@ -45,18 +63,18 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
-    background-size: 42px 42px;
-    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 85%);
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 85%);
+      linear-gradient(rgba(232, 238, 242, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232, 238, 242, 0.018) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 90%);
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 90%);
     pointer-events: none;
     z-index: 0;
   }
 
   ::selection {
-    background: var(--color-gold);
-    color: var(--color-bg);
+    background: var(--color-steel);
+    color: var(--color-obsidian);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -68,13 +86,23 @@
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-display), "Times New Roman", serif;
-    letter-spacing: 0;
+    font-family: var(--font-display), "Arial Black", sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .font-editorial {
+    font-family: var(--font-editorial), Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: -0.02em;
   }
 
   .font-mono {
     font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-feature-settings: "tnum", "ss02";
+    letter-spacing: 0.04em;
   }
 
   .text-balance {
@@ -83,5 +111,76 @@
 
   .text-pretty {
     text-wrap: pretty;
+  }
+
+  /* Mono kicker with 28px steel bar — brand signature */
+  .kicker {
+    font-family: var(--font-mono), monospace;
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    line-height: 1;
+  }
+  .kicker::before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: var(--color-steel);
+    flex-shrink: 0;
+  }
+
+  /* Corner bracket decorations — brand signature */
+  .brackets {
+    position: absolute;
+    inset: 20px;
+    pointer-events: none;
+  }
+  .brackets span {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--color-steel);
+  }
+  .brackets span:nth-child(1) { top: 0; left: 0; border-right: none; border-bottom: none; }
+  .brackets span:nth-child(2) { top: 0; right: 0; border-left: none; border-bottom: none; }
+  .brackets span:nth-child(3) { bottom: 0; left: 0; border-right: none; border-top: none; }
+  .brackets span:nth-child(4) { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+  /* Diagonal weave for logo plates */
+  .weave {
+    background-image:
+      linear-gradient(135deg, transparent 49.5%, rgba(127, 169, 196, 0.05) 50%, transparent 50.5%);
+    background-size: 40px 40px;
+  }
+
+  /* Hero title line entrance — CSS-only, no hydration risk */
+  .rise-line {
+    opacity: 0;
+    transform: translateY(32px);
+    animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .rise-line-1 { animation-delay: 0.15s; }
+  .rise-line-2 { animation-delay: 0.30s; }
+  .rise-line-3 { animation-delay: 0.45s; }
+  .rise-line-4 { animation-delay: 0.75s; }
+  .rise-line-5 { animation-delay: 0.90s; }
+
+  @keyframes rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise-line {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
   }
 }

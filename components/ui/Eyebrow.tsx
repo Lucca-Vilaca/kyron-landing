@@ -6,15 +6,23 @@ type EyebrowProps = {
   className?: string;
 };
 
+/**
+ * Mono kicker with the 28px steel bar prefix — Kyron brand signature.
+ * Uses JetBrains Mono, uppercase, steel color, 0.24em tracking.
+ */
 export function Eyebrow({ children, className }: EyebrowProps) {
   return (
     <p
       className={cn(
-        "inline-flex items-center gap-2 text-[11px] font-medium uppercase leading-none tracking-[0.22em] text-gold",
+        "inline-flex items-center gap-3 font-mono text-[11px] uppercase leading-none text-steel",
+        "tracking-[0.24em]",
         className,
       )}
     >
-      <span className="inline-block h-3 w-[3px] bg-crimson" aria-hidden="true" />
+      <span
+        aria-hidden="true"
+        className="inline-block h-px w-7 bg-steel"
+      />
       {children}
     </p>
   );

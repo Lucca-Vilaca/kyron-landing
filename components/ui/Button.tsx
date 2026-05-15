@@ -1,16 +1,18 @@
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary";
+type Variant = "primary" | "secondary" | "ghost";
 
 const baseStyles =
-  "inline-flex items-center justify-center rounded-sm px-[22px] py-[14px] text-[14px] font-semibold leading-none transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
+  "group relative inline-flex items-center justify-center gap-2 rounded-sm px-6 py-[15px] text-[12px] font-semibold uppercase leading-none tracking-[0.18em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian";
 
 const variantStyles: Record<Variant, string> = {
   primary:
-    "bg-gold text-[#0b0b0d] hover:bg-gold-soft hover:-translate-y-[1px] active:translate-y-0",
+    "bg-steel text-obsidian hover:bg-steel-soft hover:-translate-y-[1px] active:translate-y-0",
   secondary:
-    "border border-white/[0.18] text-ink hover:border-gold hover:-translate-y-[1px] active:translate-y-0",
+    "border border-line-2 text-ink hover:border-steel hover:text-steel hover:-translate-y-[1px] active:translate-y-0",
+  ghost:
+    "text-ink-dim hover:text-steel",
 };
 
 type BaseProps = {
@@ -40,6 +42,12 @@ export function Button(props: AnchorProps | ButtonElProps) {
     return (
       <a href={href} className={classes} {...rest}>
         {children}
+        <span
+          aria-hidden="true"
+          className="translate-x-0 transition-transform duration-200 group-hover:translate-x-[3px]"
+        >
+          →
+        </span>
       </a>
     );
   }
@@ -50,6 +58,12 @@ export function Button(props: AnchorProps | ButtonElProps) {
   return (
     <button type="button" className={classes} {...rest}>
       {children}
+      <span
+        aria-hidden="true"
+        className="translate-x-0 transition-transform duration-200 group-hover:translate-x-[3px]"
+      >
+        →
+      </span>
     </button>
   );
 }

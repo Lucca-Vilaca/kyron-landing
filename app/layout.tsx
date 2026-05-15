@@ -1,45 +1,62 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Archivo, Archivo_Black, Fraunces, JetBrains_Mono } from "next/font/google";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 import "./globals.css";
 
-const instrumentSerif = Instrument_Serif({
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const archivoBlack = Archivo_Black({
   subsets: ["latin"],
   weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
+  variable: "--font-archivo-black",
   display: "swap",
 });
 
-const geist = Geist({
+const fraunces = Fraunces({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-geist",
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-geist-mono",
+  weight: ["400", "500", "700"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Kyron | Treino com IA, disciplina e progressão",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://kyron.app",
+  ),
+  title: "Kyron — Treino é combate. Não rotina.",
   description:
-    "Kyron transforma rotina de treino em sistema de evolução: IA para montar sessões, score de consistência, chat, ranking e histórico de progresso.",
+    "Sistema de treino com IA para artes marciais e esportes de combate. Sessões montadas sob seu contexto, score de consistência e progressão visível — sem atalho, só trilha.",
   openGraph: {
-    title: "Kyron | Treino com IA, disciplina e progressão",
+    title: "Kyron — Treino é combate. Não rotina.",
     description:
-      "Plano personalizado, execução guiada, chat esportivo, score de consistência e ranking para transformar rotina em evolução real.",
+      "IA que monta a sessão, registra a execução e devolve progresso real. Boxe, MMA, muay thai — dentro ou fora da academia.",
     type: "website",
     locale: "pt_BR",
+    siteName: "Kyron",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kyron — Treino é combate. Não rotina.",
+    description:
+      "IA que monta a sessão, registra a execução e devolve progresso real.",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0b0b0d",
+  themeColor: "#0A0D10",
 };
 
 export default function RootLayout({
@@ -50,7 +67,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${instrumentSerif.variable} ${geist.variable} ${geistMono.variable}`}
+      className={`${archivo.variable} ${archivoBlack.variable} ${fraunces.variable} ${jetbrains.variable}`}
     >
       <body>
         <MotionProvider>{children}</MotionProvider>

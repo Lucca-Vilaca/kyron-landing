@@ -1,17 +1,27 @@
 export const content = {
   nav: [
     { label: "Produto", href: "#prova" },
-    { label: "Como funciona", href: "#como-funciona" },
-    { label: "FAQ", href: "#faq" },
+    { label: "Método", href: "#como-funciona" },
+    { label: "Sistema", href: "#diferenciais" },
+    { label: "Dúvidas", href: "#faq" },
     { label: "Waitlist", href: "#cta" },
   ],
 
   hero: {
-    eyebrow: "TREINO COM IA · ARTES MARCIAIS",
-    headingBefore: "Seu treino",
-    headingEmphasis: "deixa de ser",
-    headingAfter: "improviso.",
+    section: "01",
+    eyebrow: "Manifesto · Treino com IA",
+    headingBefore: "Treino",
+    headingEmphasis: "é combate.",
+    headingAfter: "Não rotina.",
     sub: "IA que monta a sessão, registra a execução e devolve progresso real. Feito pra quem treina boxe, MMA e rotinas de combate — dentro ou fora da academia.",
+    meta: {
+      doc: "REV · 02.26",
+      region: "BR · PT-BR",
+    },
+    stat: {
+      value: "—",
+      label: "Sem atalho. Só trilha.",
+    },
     ctaPrimary: {
       label: "Entrar na waitlist",
       href: "mailto:lucca.vilaca@gmail.com?subject=Quero%20testar%20o%20Kyron",
@@ -20,71 +30,74 @@ export const content = {
   },
 
   prova: {
-    eyebrow: "PROVA",
+    section: "02",
+    eyebrow: "Produto · 03 telas",
     headingBefore: "Mais próximo de um app real do que de uma ",
-    headingEmphasis: "promessa abstrata",
-    headingAfter: ".",
-    sub: "Como o Kyron organiza contexto, treino e progresso.",
+    headingEmphasis: "promessa abstrata.",
+    headingAfter: "",
+    sub: "Como o Kyron organiza treino, progresso e comunidade — sem decorativo.",
     cards: [
       {
-        ordinal: "I",
-        label: "Onboarding",
-        title: "Seu contexto entra antes do treino",
-        items: [
-          "Escolha de disciplinas em 7 passos",
-          "Insight da IA explicando cada ciclo",
-          "Artes marciais, musculação, esportes com bola",
-          "Perfil calibrado antes da primeira sessão",
-        ],
-        featured: false,
-        image: {
-          webp: "/assets/mockups/01-onboarding.svg",
-          avif: undefined,
-          alt: "Tela de onboarding do Kyron com insight da IA sobre musculação",
-        },
-      },
-      {
-        ordinal: "II",
+        ordinal: "01",
         label: "Plano da semana",
         title: "Semana inteira já montada",
         items: [
           "Uma sessão por dia de treino, por modalidade",
-          "Artes marciais, musculação ou esportes com bola",
+          "Artes marciais, musculação ou conditioning",
           "XP por sessão concluída, calibrado pela IA",
-          "\"Gerar novo treino\" a qualquer momento",
-        ],
-        featured: true,
-        image: {
-          webp: "/assets/mockups/03-treinos.svg",
-          avif: undefined,
-          alt: "Tela Meus Treinos do Kyron com 15 sessões da semana",
-        },
-      },
-      {
-        ordinal: "III",
-        label: "Progressão",
-        title: "Consistência visível",
-        items: [
-          "Kyron Score 9 — ritmo atual",
-          "450 XP acumulados em 3 treinos",
-          "2 semanas consecutivas",
-          "Disciplinas e níveis no mesmo perfil",
+          "Pendentes e completos no mesmo plano",
         ],
         featured: false,
         image: {
-          webp: "/assets/mockups/04-perfil.svg",
-          avif: undefined,
-          alt: "Tela de perfil do Kyron mostrando Kyron Score e XP",
+          webp: "/assets/mockups/03-treinos.webp",
+          avif: "/assets/mockups/03-treinos.avif",
+          alt: "Tela Meus Treinos do Kyron com a lista de rounds da semana",
+        },
+      },
+      {
+        ordinal: "02",
+        label: "Score & progressão",
+        title: "Consistência virou número",
+        items: [
+          "Kyron Score 9 — ritmo atual",
+          "450 XP acumulados em 3 treinos",
+          "Métricas semanais — treinos, semanas, XP",
+          "Disciplinas e nível no mesmo perfil",
+        ],
+        featured: true,
+        image: {
+          webp: "/assets/mockups/04-perfil.webp",
+          avif: "/assets/mockups/04-perfil.avif",
+          alt: "Tela de perfil do Kyron mostrando Kyron Score 9 e métricas de atleta intermediário",
+        },
+      },
+      {
+        ordinal: "03",
+        label: "Comunidade",
+        title: "Sua posição no ranking",
+        items: [
+          "Pódio tier · global e amigos",
+          "Sua posição em destaque no centro",
+          "Ranking geral por XP da temporada",
+          "Atletas comparáveis pelo seu contexto",
+        ],
+        featured: false,
+        image: {
+          webp: "/assets/mockups/05-ranking.webp",
+          avif: "/assets/mockups/05-ranking.avif",
+          alt: "Tela de comunidade do Kyron com ranking tier global mostrando o pódio e a posição do atleta",
         },
       },
     ],
   },
 
   comoFunciona: {
-    eyebrow: "COMO FUNCIONA",
-    headingBefore: "Três etapas pra sair da intenção ",
-    headingEmphasis: "e entrar na rotina",
-    headingAfter: ".",
+    section: "03",
+    eyebrow: "Método · 03 etapas",
+    headingBefore: "Disciplina ",
+    headingEmphasis: "virou plano.",
+    headingAfter: "",
+    sub: "Três etapas pra sair da intenção e entrar na rotina.",
     steps: [
       {
         number: "01",
@@ -111,43 +124,63 @@ export const content = {
   },
 
   diferenciais: {
-    eyebrow: "DIFERENCIAIS",
-    headingBefore: "O que faz o Kyron parecer ",
-    headingEmphasis: "produto, não demo",
-    headingAfter: ".",
+    section: "04",
+    eyebrow: "Sistema · Diferenciais",
+    headingBefore: "A gente mede a sua ",
+    headingEmphasis: "garra.",
+    headingAfter: "",
+    sub: "O que faz o Kyron parecer produto, não demo.",
     items: [
       {
         title: "IA que entende seu contexto",
         description:
           "O treino nasce do seu ambiente, nível e tempo disponível — não de um template genérico. Funciona pra academia, mas também pra boxe e MMA com estrutura reduzida.",
         featured: true,
+        tag: "Núcleo",
       },
       {
         title: "Execução sem fricção",
         description:
           "Séries, descanso e progressão aparecem com clareza pra você treinar sem pensar na interface.",
         featured: false,
+        tag: "Interface",
       },
       {
         title: "Chat útil, não decorativo",
         description:
           "Um assistente focado em treino, recuperação e performance de combate. Tom direto e contextual.",
         featured: false,
+        tag: "Assistente",
       },
       {
         title: "Gamificação com propósito",
         description:
           "XP, score e ranking servem pra reforçar consistência — não pra poluir a experiência.",
         featured: false,
+        tag: "Progressão",
       },
     ],
   },
 
+  taglines: {
+    section: "05",
+    eyebrow: "Voz · Manifesto",
+    lines: [
+      { idx: "T · 01", text: "Treino", em: "é", rest: "combate.", use: "Primária" },
+      { idx: "T · 02", text: "Aparecer é o", em: "mínimo.", rest: "", use: "Provocação" },
+      { idx: "T · 03", text: "Disciplina", em: "virou", rest: "plano.", use: "Onboarding" },
+      { idx: "T · 04", text: "A gente mede a sua", em: "garra.", rest: "", use: "Score" },
+      { idx: "T · 05", text: "Próximo round", em: "começa", rest: "amanhã.", use: "Push" },
+      { idx: "T · 06", text: "Não vende atalho.", em: "Trilha.", rest: "", use: "Campanha" },
+    ],
+  },
+
   faq: {
-    eyebrow: "FAQ",
+    section: "06",
+    eyebrow: "Dúvidas · FAQ",
     headingBefore: "Objeções previsíveis, ",
-    headingEmphasis: "respostas diretas",
-    headingAfter: ".",
+    headingEmphasis: "respostas diretas.",
+    headingAfter: "",
     items: [
       {
         question: "Serve para iniciante?",
@@ -173,10 +206,11 @@ export const content = {
   },
 
   cta: {
-    eyebrow: "PRÓXIMO PASSO",
-    headingBefore: "Se você quer testar cedo, ",
-    headingEmphasis: "esse é o ponto de entrada",
-    headingAfter: ".",
+    section: "07",
+    eyebrow: "Entrada · Próximo round",
+    headingBefore: "Próximo round ",
+    headingEmphasis: "começa",
+    headingAfter: " com você.",
     sub: "Deixe seus dados e o contexto do seu treino. Entramos em contato assim que a waitlist abrir.",
     emailTo: "lucca.vilaca@gmail.com",
     emailSubject: "Quero testar o Kyron",
@@ -188,8 +222,9 @@ export const content = {
 
   footer: {
     brand: "KYRON",
-    tagline: "Equipe de desenvolvimento Kyron",
-    copyright: "© 2026 Todos os direitos reservados",
+    tagline: "Treino é combate. Não rotina.",
+    doc: "BRAND · REV 02.26",
+    copyright: "© 2026 Kyron. Todos os direitos reservados.",
   },
 } as const;
 

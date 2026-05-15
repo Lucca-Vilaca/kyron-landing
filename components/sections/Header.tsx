@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import { content } from "@/lib/content";
 import { cn } from "@/lib/cn";
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+import { Monogram, Wordmark } from "@/components/ui/Monogram";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,27 +34,32 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-4 z-50 mx-auto mt-4 flex w-[min(calc(100%-32px),1240px)] items-center justify-between rounded-full border border-line px-5 py-3 backdrop-blur-xl transition-colors",
-        scrolled ? "bg-black/70" : "bg-black/40"
+        "sticky top-0 z-50 flex items-center justify-between gap-4 px-4 py-3 sm:px-5 sm:py-4 md:px-8 md:py-5",
+        "border-b border-transparent transition-all duration-300",
+        scrolled
+          ? "border-line bg-obsidian/80 backdrop-blur-xl"
+          : "bg-transparent backdrop-blur-0",
       )}
     >
-      <a href="#top" className="flex items-center gap-2" aria-label="Kyron">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={`${basePath}/assets/kyron-logo.webp`}
-          alt=""
-          className="h-7 w-7 object-contain"
-        />
-        <span className="text-[13px] font-semibold uppercase tracking-[0.24em] text-ink">Kyron</span>
+      {/* Left — monogram + wordmark */}
+      <a href="#top" className="flex items-center gap-3" aria-label="Kyron — ir ao topo">
+        <span className="flex h-8 w-8 items-center justify-center border border-line-2 p-1">
+          <Monogram size={22} />
+        </span>
+        <Wordmark size={18} />
       </a>
 
+      {/* Right — nav */}
       <nav className="hidden md:flex items-center gap-7" aria-label="Navegação principal">
-        {content.nav.map((item) => (
+        {content.nav.map((item, i) => (
           <a
             key={item.href}
             href={item.href}
-            className="text-[13px] text-ink-muted transition-colors hover:text-ink"
+            className="group relative font-mono text-[11px] uppercase tracking-[0.18em] text-ink-dim transition-colors hover:text-ink"
           >
+            <span className="mr-2 text-steel/50">
+              {String(i + 1).padStart(2, "0")}
+            </span>
             {item.label}
           </a>
         ))}
@@ -71,15 +75,15 @@ export function Header() {
       >
         <span
           className={cn(
-            "block h-[2px] w-5 bg-ink transition-transform",
-            open && "translate-y-[7px] rotate-45"
+            "block h-[1.5px] w-5 bg-ink transition-transform",
+            open && "translate-y-[7px] rotate-45",
           )}
         />
-        <span className={cn("block h-[2px] w-5 bg-ink transition-opacity", open && "opacity-0")} />
+        <span className={cn("block h-[1.5px] w-5 bg-ink transition-opacity", open && "opacity-0")} />
         <span
           className={cn(
-            "block h-[2px] w-5 bg-ink transition-transform",
-            open && "-translate-y-[7px] -rotate-45"
+            "block h-[1.5px] w-5 bg-ink transition-transform",
+            open && "-translate-y-[7px] -rotate-45",
           )}
         />
       </button>
@@ -88,20 +92,28 @@ export function Header() {
         {open && (
           <m.div
             id="mobile-nav"
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-bg/95 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-40 flex flex-col items-start justify-center gap-10 bg-obsidian/98 px-8 backdrop-blur-xl md:hidden"
             initial={prefersReduced ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={prefersReduced ? undefined : { opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            {content.nav.map((item) => (
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-muted">
+              Navegação
+            </span>
+            {content.nav.map((item, i) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="font-display text-3xl text-ink"
+                className="group flex items-baseline gap-4"
               >
-                {item.label}
+                <span className="font-mono text-[11px] tracking-[0.2em] text-steel">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="font-display text-[40px] uppercase tracking-[-0.03em] text-ink group-hover:text-steel transition-colors">
+                  {item.label}
+                </span>
               </a>
             ))}
           </m.div>
